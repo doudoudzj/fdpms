@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class EnfironmentController extends Controller {
-
     // 获得用户系统、地址位置、浏览器分类
     async getDataGroupBy() {
         const { ctx } = this;
@@ -20,7 +19,7 @@ class EnfironmentController extends Controller {
         const result = await ctx.service.web.environment.getDataGroupBy(type, url, appId, beginTime, endTime);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -37,7 +36,7 @@ class EnfironmentController extends Controller {
         const result = await ctx.service.web.environment.getEnvironmentForPage(appId, markPage);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

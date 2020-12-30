@@ -3,32 +3,33 @@
 const Controller = require('egg').Controller;
 
 class WxController extends Controller {
-
     // 新增系统
     async wxaddsystem() {
         const { ctx } = this;
         await ctx.render('wx/addsystem', {
             data: {
-                title: '新增系统',
-            },
+                title: '新增系统'
+            }
         });
     }
+
     // 小程序首页
     async wxhome() {
         const { ctx } = this;
         await ctx.render('wx/home', {
             data: {
-                title: '数据分析',
-            },
+                title: '数据分析'
+            }
         });
     }
+
     // 小程序设置页面
     async wxsetting() {
         const { ctx } = this;
         await ctx.render('wx/setting', {
             data: {
-                title: '系统设置',
-            },
+                title: '系统设置'
+            }
         });
     }
 
@@ -37,8 +38,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/pagesavg', {
             data: {
-                title: '页面平均性能指标',
-            },
+                title: '页面平均性能指标'
+            }
         });
     }
 
@@ -47,8 +48,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/pageslist', {
             data: {
-                title: '页面性能数据列表',
-            },
+                title: '页面性能数据列表'
+            }
         });
     }
 
@@ -56,8 +57,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/pagedetails', {
             data: {
-                title: '页面性能详情数据',
-            },
+                title: '页面性能详情数据'
+            }
         });
     }
 
@@ -66,8 +67,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/ajaxavg', {
             data: {
-                title: 'ajax平均性能指标',
-            },
+                title: 'ajax平均性能指标'
+            }
         });
     }
 
@@ -76,8 +77,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/ajaxdetail', {
             data: {
-                title: 'ajax详情',
-            },
+                title: 'ajax详情'
+            }
         });
     }
 
@@ -85,8 +86,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/ajaxitemdetail', {
             data: {
-                title: '单个ajax详情信息',
-            },
+                title: '单个ajax详情信息'
+            }
         });
     }
 
@@ -95,8 +96,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/erroravg', {
             data: {
-                title: '错误分类列表',
-            },
+                title: '错误分类列表'
+            }
         });
     }
 
@@ -105,8 +106,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/errordetail', {
             data: {
-                title: '错误详情列表',
-            },
+                title: '错误详情列表'
+            }
         });
     }
     // 错误页面详情信息
@@ -114,8 +115,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/erroritemdetail', {
             data: {
-                title: '错误页面详情信息',
-            },
+                title: '错误页面详情信息'
+            }
         });
     }
 
@@ -124,8 +125,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/analysislist', {
             data: {
-                title: '用户行为访问轨迹',
-            },
+                title: '用户行为访问轨迹'
+            }
         });
     }
 
@@ -134,8 +135,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/analysisdetail', {
             data: {
-                title: '用户访问轨迹详情',
-            },
+                title: '用户访问轨迹详情'
+            }
         });
     }
     // TOP分析
@@ -143,8 +144,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/top', {
             data: {
-                title: 'TOP指标',
-            },
+                title: 'TOP指标'
+            }
         });
     }
 
@@ -152,8 +153,8 @@ class WxController extends Controller {
         const { ctx } = this;
         await ctx.render('wx/diagram', {
             data: {
-                title: '全国省份访问量热力图',
-            },
+                title: '全国省份访问量热力图'
+            }
         });
     }
 }

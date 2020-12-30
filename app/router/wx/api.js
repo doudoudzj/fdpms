@@ -1,16 +1,9 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const apiV1Router = app.router.namespace('/api/v1/wx/');
     const { controller, middleware } = app;
-    const {
-        report,
-        pvuvip,
-        pages,
-        ajax,
-        error,
-        analysis,
-    } = controller.api.wx;
+    const { report, pvuvip, pages, ajax, error, analysis } = controller.api.wx;
 
     // 校验用户是否登录中间件
     const tokenRequired = middleware.tokenRequired();
@@ -71,5 +64,4 @@ module.exports = app => {
     apiV1Router.get('error/getOneErrorList', tokenRequired, error.getOneErrorList);
     // 单个错误详情
     apiV1Router.get('error/getErrorDetail', tokenRequired, error.getErrorDetail);
-
 };

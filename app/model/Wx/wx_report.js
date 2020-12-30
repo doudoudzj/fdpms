@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
     const Mixed = Schema.Types.Mixed;
@@ -21,7 +21,7 @@ module.exports = app => {
         userInfo: { type: Mixed }, // 用户信息
         pages: { type: Mixed }, // 小程序path路径信息
         ajaxs: { type: Array }, // 当前path页面ajax相关信息
-        type: { type: Number }, // 1:网页级别上报  2：后续操作ajax|error上报
+        type: { type: Number } // 1:网页级别上报  2：后续操作ajax|error上报
     });
     WxReportSchema.index({ create_time: 1 });
 

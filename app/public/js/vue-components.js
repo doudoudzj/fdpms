@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 let Component = {
-    commonsearch:{
+    commonsearch: {
         template: `<div class="component_search mr20">
             <a href="/selectype"><button class="btn btn-main">+添加应用</button></a>
             <div class="select">
@@ -19,66 +19,58 @@ let Component = {
                 </div>
             </div>
         </div>`,
-        props:{
-            done:{
-                type:Function,
-                default:()=>{}
-            },
-        },
-        data:function(){
-            return{
-                timeText:'全部'
+        props: {
+            done: {
+                type: Function,
+                default: () => {}
             }
         },
-        mounted(){
-            let _this=this;
+        data: function () {
+            return {
+                timeText: '全部'
+            };
+        },
+        mounted() {
+            let _this = this;
             // 添加active样式
-            let selecttimes = util.getStorage('local', 'userselectTime') || 60000
-            let objs = $('.select-time li')
-            for(let i=0,len=objs.length;i<len;i++){
-                let times = $(objs[i]).attr('data-time')
-                let text = $(objs[i]).attr('data-text')
-                if(times == selecttimes){
-                    _this.timeText = text
-                    $(objs[i]).addClass('active')
+            let selecttimes = util.getStorage('local', 'userselectTime') || 60000;
+            let objs = $('.select-time li');
+            for (let i = 0, len = objs.length; i < len; i++) {
+                let times = $(objs[i]).attr('data-time');
+                let text = $(objs[i]).attr('data-text');
+                if (times == selecttimes) {
+                    _this.timeText = text;
+                    $(objs[i]).addClass('active');
                 }
             }
             // active样式
-            $('.times').on('click',(e) => {
+            $('.times').on('click', (e) => {
                 e.stopPropagation();
                 $('.select-time').show();
             });
-            $(document).on('click',function(e){
+            $(document).on('click', function (e) {
                 $('.select-time').hide();
             });
-            $('.select-time').click(function(e){
+            $('.select-time').click(function (e) {
                 e.stopPropagation();
-            })
-            $('.select-time li').on('click',function(e){
-                $('.select-time li').removeClass('active')
-                $(this).addClass('active')
-                let time = $(this).attr('data-time')
-                let text = $(this).attr('data-text')
-                _this.timeText = text
-                util.setStorage('local','userselectTime',time)
-            })
+            });
+            $('.select-time li').on('click', function (e) {
+                $('.select-time li').removeClass('active');
+                $(this).addClass('active');
+                let time = $(this).attr('data-time');
+                let text = $(this).attr('data-text');
+                _this.timeText = text;
+                util.setStorage('local', 'userselectTime', time);
+            });
         },
-        methods:{
-            timeSure(){
+        methods: {
+            timeSure() {
                 $('.select-time').hide();
-                this.done&&this.done()
+                this.done && this.done();
             }
-        },
+        }
     }
+};
+for (let n in Component) {
+    Vue.component(n, Component[n]);
 }
-for(let n in Component){
-    Vue.component(n, Component[n])
-}
-
-
-
-
-
-
-
-

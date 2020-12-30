@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
     const conn = app.mongooseDB.get('db3');
@@ -15,7 +15,7 @@ module.exports = app => {
         depth: { type: Number }, // 平均访问深度
         flow: { type: Number }, // 流量消费总额
         type: { type: Number, default: 1 }, // 1:每分钟数据  2：每小时数据
-        create_time: { type: Date, default: Date.now },
+        create_time: { type: Date, default: Date.now }
     });
 
     WebPvUvIpSchema.index({ type: 1, app_id: 1, bounce: 1, depth: 1, create_time: 1 });

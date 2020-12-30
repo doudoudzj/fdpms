@@ -54,11 +54,14 @@ module.exports = {
     },
     // 返回结果json
     result(jn = {}) {
-        return Object.assign({
-            code: 1000,
-            desc: '成功',
-            data: '',
-        }, jn);
+        return Object.assign(
+            {
+                code: 1000,
+                desc: '成功',
+                data: ''
+            },
+            jn
+        );
     },
     format(date, fmt) {
         const o = {
@@ -67,11 +70,11 @@ module.exports = {
             'h+': date.getHours(), // 小时
             'H+': date.getHours() > 12 ? date.getHours() - 12 : date.getHours(),
             'm+': date.getMinutes(), // 分
-            's+': date.getSeconds(), // 秒
+            's+': date.getSeconds() // 秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
         for (const k in o) {
-            if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+            if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
         }
         return fmt;
     },
@@ -100,8 +103,8 @@ module.exports = {
     // 重启mongodb服务器
     restartMongodbs(type, ctx, catcherr) {
         if (this.config.shell_restart.mongodb && this.config.shell_restart.mongodb.length) {
-            this.config.shell_restart.mongodb.forEach(item => {
-                exec(`sh ${item}`, error => {
+            this.config.shell_restart.mongodb.forEach((item) => {
+                exec(`sh ${item}`, (error) => {
                     if (error) {
                         this.logger.info(`重启${type}数据库失败!`);
                         return;
@@ -110,8 +113,8 @@ module.exports = {
                     ctx.service.errors.saveSysAndDbErrors(type, item, catcherr);
                     // 重启servers
                     if (this.config.shell_restart.servers && this.config.shell_restart.servers.length) {
-                        this.config.shell_restart.servers.forEach(item => {
-                            exec(`sh ${item}`, error => {
+                        this.config.shell_restart.servers.forEach((item) => {
+                            exec(`sh ${item}`, (error) => {
                                 if (error) {
                                     this.logger.info('重启node.js服务失败!');
                                     return;
@@ -123,6 +126,5 @@ module.exports = {
                 });
             });
         }
-    },
+    }
 };
-

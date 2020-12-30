@@ -6,7 +6,6 @@ const path = require('path');
 const url = require('url');
 const querystring = require('querystring');
 class ReportTaskService extends Service {
-
     constructor(params) {
         super(params);
         this.cacheJson = {};
@@ -72,11 +71,11 @@ class ReportTaskService extends Service {
     // kafka 消费信息
     async saveWxReportDatasForKafka() {
         if (this.kafkaConfig.consumer) {
-            this.app.kafka.consumer('wx', message => {
+            this.app.kafka.consumer('wx', (message) => {
                 this.consumerDatas(message);
             });
         } else if (this.kafkaConfig.consumerGroup) {
-            this.app.kafka.consumerGroup('wx', message => {
+            this.app.kafka.consumerGroup('wx', (message) => {
                 this.consumerDatas(message);
             });
         }
@@ -91,8 +90,9 @@ class ReportTaskService extends Service {
             json.time = query.time;
 
             this.getWxItemDataForKafka(query);
-
-        } catch (err) { console.log(err); }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     // 单个item储存数据
@@ -143,14 +143,11 @@ class ReportTaskService extends Service {
         }
 
         /*
-        * 请求db1数据库进行同步数据
-        *  查询db1是否正常,不正常则重启
-        */
+         * 请求db1数据库进行同步数据
+         *  查询db1是否正常,不正常则重启
+         */
         try {
-            const datas = await this.ctx.model.Wx.WxReport.find(query)
-                .read('sp')
-                .sort({ create_time: 1 })
-                .exec();
+            const datas = await this.ctx.model.Wx.WxReport.find(query).read('sp').sort({ create_time: 1 }).exec();
             this.app.logger.info(`-----------db1--查询wx端db1数据库是否可用----${datas.length}------`);
 
             // 储存数据
@@ -158,7 +155,6 @@ class ReportTaskService extends Service {
         } catch (err) {
             this.app.restartMongodbs('db1', this.ctx, err);
         }
-
     }
 
     // 储存数据到db3
@@ -219,7 +215,7 @@ class ReportTaskService extends Service {
             mark_user: query.markuser || '',
             mark_uv: query.markuv || '',
             pages: query.pages,
-            ajaxs: query.ajaxs,
+            ajaxs: query.ajaxs
         };
 
         if (type === 1) {
@@ -229,7 +225,7 @@ class ReportTaskService extends Service {
                 net: query.net,
                 system: query.system,
                 loc: query.loc,
-                userInfo: query.userInfo,
+                userInfo: query.userInfo
             });
         }
         return item;
@@ -300,7 +296,7 @@ class ReportTaskService extends Service {
         if (!data.ajaxs && !data.ajaxs.length) return;
         let slowAjaxTime = system.slow_ajax_time || 2;
 
-        data.ajaxs.forEach(item => {
+        data.ajaxs.forEach((item) => {
             let duration = Math.abs(item.duration || 0);
             if (duration > 60000) duration = 60000;
             slowAjaxTime = slowAjaxTime * 1000;
@@ -330,7 +326,7 @@ class ReportTaskService extends Service {
     // 存储错误信息
     saveErrors(data) {
         if (!data.errs && !data.errs.length) return;
-        data.errs.forEach(item => {
+        data.errs.forEach((item) => {
             const errors = this.app.models.WxErrors(data.app_id)();
             errors.app_id = data.app_id;
             errors.name = item.name;
@@ -355,9 +351,8 @@ class ReportTaskService extends Service {
         this.cacheArr.push(copyip);
         const filepath = path.resolve(__dirname, `../../cache/${this.app.config.ip_city_cache_file.wx}`);
         const str = `"${copyip}":${JSON.stringify(json)},`;
-        fs.appendFile(filepath, str, { encoding: 'utf8' }, () => { });
+        fs.appendFile(filepath, str, { encoding: 'utf8' }, () => {});
     }
-
 }
 
 module.exports = ReportTaskService;

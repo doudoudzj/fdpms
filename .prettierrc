@@ -1,0 +1,10 @@
+{
+    "eslintIntegration": true,
+    "tabWidth": 4,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "TrailingCooma": "none",
+    "printWidth": 200,
+    "semi": true,
+    "bracketSpacing": true
+}

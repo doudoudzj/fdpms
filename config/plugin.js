@@ -3,41 +3,40 @@ const path = require('path');
 
 exports.ejs = {
     enable: true,
-    package: 'egg-view-ejs',
+    package: 'egg-view-ejs'
 };
 
 exports.redis = {
     enable: true,
-    package: 'egg-redis',
+    package: 'egg-redis'
 };
 
 exports.mongoose = {
     enable: true,
-    package: 'egg-mongoose',
+    package: 'egg-mongoose'
 };
 
 exports.routerPlus = {
     enable: true,
-    package: 'egg-router-plus',
+    package: 'egg-router-plus'
 };
 
 exports.cors = {
     enable: true,
-    package: 'egg-cors',
+    package: 'egg-cors'
 };
 
 exports.email = {
     enable: true,
-    path: path.join(__dirname, '../lib/plugin/egg-email'),
+    path: path.join(__dirname, '../lib/plugin/egg-email')
 };
 
 exports.kafka = {
     enable: true,
-    path: path.join(__dirname, '../lib/plugin/egg-kafka'),
+    path: path.join(__dirname, '../lib/plugin/egg-kafka')
 };
 
 exports.alinode = {
     enable: false,
-    package: 'egg-alinode',
+    package: 'egg-alinode'
 };
-

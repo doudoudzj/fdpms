@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const { router, controller } = app;
     const { web } = controller.web;
 
@@ -67,5 +67,4 @@ module.exports = app => {
 
     // 告警
     router.get('/web/alarm', web.webalarm);
-
 };

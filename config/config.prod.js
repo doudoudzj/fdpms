@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = () => {
-    const config = exports = {};
+    const config = (exports = {});
 
     config.debug = false;
 
@@ -16,7 +16,7 @@ module.exports = () => {
     config.github = {
         client_id: 'xxxxxx',
         client_secret: 'xxxxxx',
-        scope: [ 'user' ],
+        scope: ['user']
     };
 
     // ldap
@@ -24,20 +24,20 @@ module.exports = () => {
         server: 'ldap://xxx', // ldap服务器地址
         ou: 'xx', // ou
         dc: 'xx', // dc, 非com的另外一层的dc，例如 dc=foobar,dc=com, 这里填 foobar
-        isLdap: false, // 是否采用ldap;
+        isLdap: false // 是否采用ldap;
     };
 
     // 新浪微博 login
     config.weibo = {
         client_id: 'xxxxxx', // 微博的App Key
         client_secret: 'xxxxxx', // 微博的App Secret
-        scope: [ 'all' ],
+        scope: ['all']
     };
 
     // wechat login
     config.wechat = {
         client_id: 'xxxxxx', // 微信的AppId
-        client_secret: 'xxxxxx', // 微信的App Secret
+        client_secret: 'xxxxxx' // 微信的App Secret
     };
 
     // redis配置
@@ -46,8 +46,8 @@ module.exports = () => {
             port: 6379, // Redis port
             host: 'xx.xx.xx.xx', // Redis host
             password: 'xxxxxx',
-            db: 0,
-        },
+            db: 0
+        }
     };
 
     // mongodb 服务
@@ -65,9 +65,9 @@ module.exports = () => {
                 connectTimeoutMS: 10000,
                 autoReconnect: true,
                 reconnectTries: 100,
-                reconnectInterval: 1000,
-            },
-        },
+                reconnectInterval: 1000
+            }
+        }
     };
     if (config.report_data_type === 'mongodb') {
         dbclients.db1 = {
@@ -79,22 +79,22 @@ module.exports = () => {
                 connectTimeoutMS: 10000,
                 autoReconnect: true,
                 reconnectTries: 100,
-                reconnectInterval: 1000,
-            },
+                reconnectInterval: 1000
+            }
         };
     }
 
     // mongoose配置
     config.mongoose = {
-        clients: dbclients,
+        clients: dbclients
     };
 
     config.security = {
-        domainWhiteList: [ 'https://xxx.xx.com' ],
+        domainWhiteList: ['https://xxx.xx.com'],
         csrf: {
             enable: false,
-            ignore: '/api/v1/report/**',
-        },
+            ignore: '/api/v1/report/**'
+        }
     };
 
     return config;

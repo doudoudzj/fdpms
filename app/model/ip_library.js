@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
     const conn = app.mongooseDB.get('db3');
@@ -11,7 +11,7 @@ module.exports = app => {
         province: { type: String }, // 省
         city: { type: String }, // 市
         latitude: { type: Number }, // 纬度
-        longitude: { type: Number }, // 经度
+        longitude: { type: Number } // 经度
     });
 
     ipLibrarySchema.index({ ip: -1 });

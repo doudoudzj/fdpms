@@ -1,17 +1,30 @@
 {
     "extends": "eslint-config-egg",
     "rules": {
-        "indent": [
+        "indent": ["error", 4],
+        "semi": ["error", "always"],
+        "comma-dangle": [
             "error",
-            4
-        ]
+            {
+                "arrays": "never",
+                "objects": "never",
+                "imports": "never",
+                "exports": "never",
+                "functions": "never"
+            }
+        ],
+        "comma-spacing": [
+            2,
+            {
+                "before": false,
+                "after": true
+            }
+        ],
+        "array-bracket-spacing": 0, // 指定数组的元素之间要以空格隔开(,后面)
+        "arrow-parens": 0
     },
-    "plugins": [
-        "html"
-    ],
+    "plugins": ["html"],
     "settings": {
-        "html/html-extensions": [
-            ".html"
-        ]
+        "html/html-extensions": [".html"]
     }
 }

@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class SystemController extends Controller {
-
     // 新增系统
     async addNewSystem() {
         const { ctx } = this;
@@ -21,7 +20,7 @@ class SystemController extends Controller {
         const { ctx } = this;
         const result = await ctx.service.system.getSysForUserId(ctx);
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -33,7 +32,7 @@ class SystemController extends Controller {
 
         const result = await ctx.service.system.getSystemForDb(appId);
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -43,7 +42,7 @@ class SystemController extends Controller {
 
         const result = await ctx.service.system.getWebSystemList();
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -60,7 +59,7 @@ class SystemController extends Controller {
         const result = await ctx.service.system.deleteWebSystemUser(appId, userToken);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -77,7 +76,7 @@ class SystemController extends Controller {
         const result = await ctx.service.system.addWebSystemUser(appId, userToken);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -92,7 +91,7 @@ class SystemController extends Controller {
         const result = await ctx.service.system.deleteSystem(appId);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -110,7 +109,7 @@ class SystemController extends Controller {
         const result = await ctx.service.system.handleDaliyEmail(appId, email, type, true, item);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

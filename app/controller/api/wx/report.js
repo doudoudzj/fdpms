@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class ReportController extends Controller {
-
     // 微信端用户数据上报
     async wxReport() {
         const { ctx } = this;
@@ -32,23 +31,21 @@ class ReportController extends Controller {
                 if (length >= this.app.config.redis_consumption.total_limit_wx) return;
             }
             this.app.redis.lpush('wx_repore_datas', JSON.stringify(query));
-        } catch (e) { console.log(e); }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // 通过kafka 消息队列消费数据
     async saveWxReportDataForKafka(query) {
         // 生产者
-        this.app.kafka.send(
-            'wx',
-            JSON.stringify(query)
-        );
+        this.app.kafka.send('wx', JSON.stringify(query));
     }
 
     // 通过mongodb 数据库存储数据
     async saveWxReportDataForMongodb(ctx) {
         ctx.service.wx.report.saveWxReportData(ctx);
     }
-
 }
 
 module.exports = ReportController;

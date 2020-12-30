@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const { router, controller } = app;
     const { home } = controller.web;
 
@@ -24,5 +24,4 @@ module.exports = app => {
 
     // 邮件管理
     router.get('/emails', home.emails);
-
 };

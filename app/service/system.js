@@ -3,7 +3,6 @@
 const Service = require('egg').Service;
 
 class SystemService extends Service {
-
     /*
      * 保存用户上报的数据
      *
@@ -30,7 +29,7 @@ class SystemService extends Service {
         system.system_name = query.system_name;
         system.type = query.type;
         system.app_id = token;
-        system.user_id = [ query.token || '' ];
+        system.user_id = [query.token || ''];
         system.create_time = new Date();
         system.is_use = query.is_use;
         system.slow_page_time = query.slow_page_time || 5;
@@ -46,7 +45,7 @@ class SystemService extends Service {
 
         const result = await system.save();
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
         // 存储到redis
         this.updateSystemCache(token);
@@ -64,28 +63,26 @@ class SystemService extends Service {
         // 参数校验
         if (!appId) throw new Error('更新系统信息操作：app_id不能为空');
 
-        const update = { $set: {
-            is_use: query.is_use || 0,
-            system_name: query.system_name || '',
-            system_domain: query.system_domain || '',
-            slow_page_time: query.slow_page_time || 5,
-            slow_js_time: query.slow_js_time || 2,
-            type: query.type || 'web',
-            slow_css_time: query.slow_css_time || 2,
-            slow_img_time: query.slow_img_time || 2,
-            slow_ajax_time: query.slow_ajax_time || 2,
-            is_statisi_pages: query.is_statisi_pages || 0,
-            is_statisi_ajax: query.is_statisi_ajax || 0,
-            is_statisi_resource: query.is_statisi_resource || 0,
-            is_statisi_system: query.is_statisi_system || 0,
-            is_statisi_error: query.is_statisi_error || 0,
-            is_daily_use: query.is_daily_use || 0,
-        } };
-        const result = await this.ctx.model.System.update(
-            { app_id: appId },
-            update,
-            { multi: true }
-        ).exec();
+        const update = {
+            $set: {
+                is_use: query.is_use || 0,
+                system_name: query.system_name || '',
+                system_domain: query.system_domain || '',
+                slow_page_time: query.slow_page_time || 5,
+                slow_js_time: query.slow_js_time || 2,
+                type: query.type || 'web',
+                slow_css_time: query.slow_css_time || 2,
+                slow_img_time: query.slow_img_time || 2,
+                slow_ajax_time: query.slow_ajax_time || 2,
+                is_statisi_pages: query.is_statisi_pages || 0,
+                is_statisi_ajax: query.is_statisi_ajax || 0,
+                is_statisi_resource: query.is_statisi_resource || 0,
+                is_statisi_system: query.is_statisi_system || 0,
+                is_statisi_error: query.is_statisi_error || 0,
+                is_daily_use: query.is_daily_use || 0
+            }
+        };
+        const result = await this.ctx.model.System.update({ app_id: appId }, update, { multi: true }).exec();
         ctx.body = this.app.result({ data: result });
 
         // 更新redis缓存
@@ -113,7 +110,7 @@ class SystemService extends Service {
     async getSystemForAppId(appId) {
         if (!appId) throw new Error('查询某个系统信：appId不能为空');
 
-        const result = await this.app.redis.get(appId) || '{}';
+        const result = (await this.app.redis.get(appId)) || '{}';
         return JSON.parse(result);
     }
 
@@ -127,7 +124,7 @@ class SystemService extends Service {
     async getSystemForDb(appId) {
         if (!appId) throw new Error('查询某个系统信：appId不能为空');
 
-        return await this.ctx.model.System.findOne({ app_id: appId }).exec() || {};
+        return (await this.ctx.model.System.findOne({ app_id: appId }).exec()) || {};
     }
 
     /*
@@ -140,7 +137,7 @@ class SystemService extends Service {
     async getSysForUserId(ctx) {
         const token = ctx.request.query.token;
         if (!token) return [];
-        return await ctx.model.System.where('user_id').elemMatch({ $eq: token }).exec() || [];
+        return (await ctx.model.System.where('user_id').elemMatch({ $eq: token }).exec()) || [];
     }
 
     /*
@@ -156,9 +153,9 @@ class SystemService extends Service {
                     from: 'users',
                     localField: 'user_id',
                     foreignField: 'token',
-                    as: 'userlist',
-                },
-            },
+                    as: 'userlist'
+                }
+            }
         ]).exec();
     }
 
@@ -171,10 +168,7 @@ class SystemService extends Service {
      * @memberof SystemService
      */
     async deleteWebSystemUser(appId, userToken) {
-        return await this.ctx.model.System.update(
-            { app_id: appId },
-            { $pull: { user_id: userToken } },
-            { multi: true }).exec();
+        return await this.ctx.model.System.update({ app_id: appId }, { $pull: { user_id: userToken } }, { multi: true }).exec();
     }
 
     /* 系统中新增某个用户
@@ -184,10 +178,7 @@ class SystemService extends Service {
      * @memberof SystemService
      */
     async addWebSystemUser(appId, userToken) {
-        return await this.ctx.model.System.update(
-            { app_id: appId },
-            { $addToSet: { user_id: userToken } },
-            { multi: true }).exec();
+        return await this.ctx.model.System.update({ app_id: appId }, { $addToSet: { user_id: userToken } }, { multi: true }).exec();
     }
 
     /*
@@ -202,11 +193,31 @@ class SystemService extends Service {
         this.app.redis.set(appId, '', 'EX', 200);
         setTimeout(async () => {
             const conn = this.app.mongooseDB.get('db3');
-            try { await conn.dropCollection(`web_pages_${appId}`); } catch (err) { console.log(err); }
-            try { await conn.dropCollection(`web_ajaxs_${appId}`); } catch (err) { console.log(err); }
-            try { await conn.dropCollection(`web_errors_${appId}`); } catch (err) { console.log(err); }
-            try { await conn.dropCollection(`web_resources_${appId}`); } catch (err) { console.log(err); }
-            try { await conn.dropCollection(`web_environment_${appId}`); } catch (err) { console.log(err); }
+            try {
+                await conn.dropCollection(`web_pages_${appId}`);
+            } catch (err) {
+                console.log(err);
+            }
+            try {
+                await conn.dropCollection(`web_ajaxs_${appId}`);
+            } catch (err) {
+                console.log(err);
+            }
+            try {
+                await conn.dropCollection(`web_errors_${appId}`);
+            } catch (err) {
+                console.log(err);
+            }
+            try {
+                await conn.dropCollection(`web_resources_${appId}`);
+            } catch (err) {
+                console.log(err);
+            }
+            try {
+                await conn.dropCollection(`web_environment_${appId}`);
+            } catch (err) {
+                console.log(err);
+            }
         }, 500);
         return result;
     }
@@ -231,10 +242,7 @@ class SystemService extends Service {
         } else if (item === 2) {
             handleData = type === 1 ? { $addToSet: { highest_list: email } } : { $pull: { highest_list: email } };
         }
-        const result = await this.ctx.model.System.update(
-            { app_id: appId },
-            handleData,
-            { multi: true }).exec();
+        const result = await this.ctx.model.System.update({ app_id: appId }, handleData, { multi: true }).exec();
 
         // 更新redis缓存
         this.updateSystemCache(appId);
@@ -261,7 +269,7 @@ class SystemService extends Service {
             email,
             appId,
             handletype,
-            handleitem,
+            handleitem
         });
     }
 }

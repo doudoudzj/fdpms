@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class PagesController extends Controller {
-
     // 平均页面性能列表
     async getAveragePageList() {
         const { ctx } = this;
@@ -15,7 +14,7 @@ class PagesController extends Controller {
         const result = await ctx.service.web.pages.getAveragePageList(ctx);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -31,7 +30,7 @@ class PagesController extends Controller {
         const result = await ctx.service.web.pages.getOnePageList(ctx);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -51,7 +50,7 @@ class PagesController extends Controller {
         const result = await ctx.service.web.pages.getPagesForType(appId, url, speedType, pageNo, pageSize);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -68,7 +67,7 @@ class PagesController extends Controller {
         const result = await ctx.service.web.pages.getPageDetails(appId, id);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

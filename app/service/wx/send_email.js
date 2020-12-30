@@ -2,7 +2,6 @@
 const Service = require('egg').Service;
 
 class SendEmailService extends Service {
-
     constructor(params) {
         super(params);
         this.daliy = {};
@@ -11,7 +10,7 @@ class SendEmailService extends Service {
     // 收集每日日报数据
     async getDaliyDatas(data, type) {
         const config = this.app.config.email.client;
-        if (!((config.host && config.port && typeof (config.secure) === 'boolean') || config.service) || !config.auth) return;
+        if (!((config.host && config.port && typeof config.secure === 'boolean') || config.service) || !config.auth) return;
         if (!data.appId) return;
 
         if (!this.daliy[data.appId]) this.daliy[data.appId] = { pvuvip: null, toplist: null };
@@ -46,7 +45,7 @@ class SendEmailService extends Service {
             from: `${from}<${this.app.config.email.client.auth.user}>`,
             to,
             subject: day,
-            html: await this.daliyHtmlTem(datas),
+            html: await this.daliyHtmlTem(datas)
         };
         this.app.email.sendMail(mailOptions);
     }
@@ -88,7 +87,8 @@ class SendEmailService extends Service {
                 </tr>`;
             }
         }
-        return `<html style="margin:0;padding:0;">
+        return (
+            `<html style="margin:0;padding:0;">
             <style>*{margin:0;padding:0;}
             .block .item{}
             table.table tr:nth-child(odd) {background: #f7f9ff;}
@@ -111,13 +111,17 @@ class SendEmailService extends Service {
                     <div style="width:90%;margin:0 auto;margin-top:20px;background:#fff;border-radius:6px;padding:20px;overflow:hidden;">
                         <h2 style="font-size:18px;line-height:50px;">省市流量排行</h2>
                         <div>
-                            ` + provincehtml + `
+                            ` +
+            provincehtml +
+            `
                         </div>
                     </div>
                     <div style="width:90%;margin:0 auto;margin-top:20px;background:#fff;border-radius:6px;padding:20px;overflow:hidden;">
                         <h2 style="font-size:18px;line-height:50px;">省市流量排行</h2>
                         <div>
-                            ` + topbrand + `
+                            ` +
+            topbrand +
+            `
                         </div>
                     </div>
                     <div style="width:90%;margin:0 auto;margin-top:20px;background:#fff;border-radius:6px;padding:20px;overflow:hidden;">
@@ -127,7 +131,9 @@ class SendEmailService extends Service {
                                 <th style="font-size:13px;height:40px;font-weight:300;padding:8px;">页面地址</th>
                                 <th style="font-size:13px;height:40px;font-weight:300;padding:8px;">访问量</th>
                             </tr>
-                            ` + toppageshtml + `
+                            ` +
+            toppageshtml +
+            `
                         </table>
                     </div>
                     <div style="width:90%;margin:0 auto;margin-top:20px;background:#fff;border-radius:6px;padding:20px;overflow:hidden;">
@@ -136,12 +142,15 @@ class SendEmailService extends Service {
                             <tr style="border:solid 1px #eee;border-collapse:collapse;">
                                 <th style="font-size:13px;height:40px;font-weight:300;padding:8px;">页面地址</th>
                                 <th style="font-size:13px;height:40px;font-weight:300;padding:8px;">访问量</th>
-                            ` + topjumpout + `
+                            ` +
+            topjumpout +
+            `
                         </table>
                     </div>
                 </div>
             </body>
-        </html>`;
+        </html>`
+        );
     }
 }
 

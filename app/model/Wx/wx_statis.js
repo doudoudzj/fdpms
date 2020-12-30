@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
     const conn = app.mongooseDB.get('db3');
@@ -11,7 +11,7 @@ module.exports = app => {
         top_jump_out: { type: Array }, // top访问跳出率页面列表
         top_brand: { type: Array }, // top手机品牌排行
         provinces: { type: Array }, // 省份访问流量排行
-        create_time: { type: Date, default: Date.now },
+        create_time: { type: Date, default: Date.now }
     });
 
     WxStatisSchema.index({ app_id: 1, create_time: 1 });

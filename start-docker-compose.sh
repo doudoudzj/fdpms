@@ -1,2 +1,2 @@
-export hostIP='自己的外网IP'
+export hostIP='localhost'
 docker-compose up -d --build

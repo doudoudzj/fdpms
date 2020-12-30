@@ -21,7 +21,7 @@ class PvUvIpController extends Controller {
 
         ctx.body = this.app.result({
             time: betweenTime,
-            data: result,
+            data: result
         });
     }
     // 某日概况
@@ -38,7 +38,7 @@ class PvUvIpController extends Controller {
         const result = await ctx.service.web.pvuvip.getPvUvIpSurveyOne(appId, beginTime, endTime);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
     // 获得历史概况
@@ -50,7 +50,7 @@ class PvUvIpController extends Controller {
         const result = await ctx.service.web.pvuvip.getHistoryPvUvIplist(appId);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
     // 获得多条数据
@@ -70,12 +70,12 @@ class PvUvIpController extends Controller {
         const beginTime = query.beginTime || new Date(timestrat - betweenTime * 30);
         const endTime = query.endTime || new Date(timestrat);
 
-        const datalist = await ctx.service.web.pvuvip.getPvUvIpData(appId, beginTime, endTime) || [];
+        const datalist = (await ctx.service.web.pvuvip.getPvUvIpData(appId, beginTime, endTime)) || [];
         const result = await this.getTimeList(beginTime, endTime, datalist);
 
         ctx.body = this.app.result({
             time: betweenTime,
-            data: result,
+            data: result
         });
     }
     // 获得单条数据
@@ -92,7 +92,7 @@ class PvUvIpController extends Controller {
         const endTime = query.endTime || new Date(interval.prev().toString());
         const beginTime = query.beginTime || new Date(interval.prev().toString());
 
-        const datalist = await ctx.service.web.pvuvip.getPvUvIpData(appId, beginTime, endTime) || [];
+        const datalist = (await ctx.service.web.pvuvip.getPvUvIpData(appId, beginTime, endTime)) || [];
         let result = {};
         if (datalist.length) {
             result = {
@@ -101,7 +101,7 @@ class PvUvIpController extends Controller {
                 uv: datalist[0].uv || 0,
                 ip: datalist[0].ip || 0,
                 ajax: datalist[0].ajax || 0,
-                flow: parseInt((datalist[0].flow || 0) / 1024 / 1024),
+                flow: parseInt((datalist[0].flow || 0) / 1024 / 1024)
             };
         } else {
             result = {
@@ -110,11 +110,11 @@ class PvUvIpController extends Controller {
                 uv: 0,
                 ip: 0,
                 ajax: 0,
-                flow: 0,
+                flow: 0
             };
         }
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
     // 获得时间列表
@@ -123,10 +123,11 @@ class PvUvIpController extends Controller {
         const options = {
             currentDate: new Date(beginTime),
             endDate: new Date(endTime),
-            iterator: true,
+            iterator: true
         };
         const interval = parser.parseExpression(this.app.config.pvuvip_task_minute_time, options);
-        while (true) { // eslint-disable-line
+        while (true) {
+            // eslint-disable-line
             try {
                 const obj = interval.next();
                 const date = new Date(obj.value.toString());
@@ -137,9 +138,9 @@ class PvUvIpController extends Controller {
                     uv: 0,
                     ip: 0,
                     ajax: 0,
-                    flow: 0,
+                    flow: 0
                 };
-                datalist.forEach(item => {
+                datalist.forEach((item) => {
                     if (date.getTime() === new Date(item.create_time).getTime()) {
                         items.pv = item.pv || 0;
                         items.uv = item.uv || 0;

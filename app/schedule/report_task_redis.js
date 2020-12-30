@@ -1,12 +1,12 @@
 'use strict';
 
 // 处理数据定时任务
-module.exports = app => {
+module.exports = (app) => {
     return {
         schedule: {
             cron: app.config.redis_consumption.task_time,
             type: 'worker',
-            disable: !(app.config.report_data_type === 'redis'),
+            disable: !(app.config.report_data_type === 'redis')
         },
         // 定时处理上报的数据 redis同步到db3数据
         async task(ctx) {
@@ -22,6 +22,6 @@ module.exports = app => {
                     app.restartMongodbs('db3', ctx, err);
                 }
             }
-        },
+        }
     };
 };

@@ -7,7 +7,6 @@ const Service = require('egg').Service;
 const fs = require('fs');
 const path = require('path');
 class ReportTaskService extends Service {
-
     constructor(params) {
         super(params);
         this.cacheJson = {};
@@ -75,11 +74,11 @@ class ReportTaskService extends Service {
     // kafka 消费信息
     async saveWebReportDatasForKafka() {
         if (this.kafkaConfig.consumer) {
-            this.app.kafka.consumer('web', message => {
+            this.app.kafka.consumer('web', (message) => {
                 this.consumerDatas(message);
             });
         } else if (this.kafkaConfig.consumerGroup) {
-            this.app.kafka.consumerGroup('web', message => {
+            this.app.kafka.consumerGroup('web', (message) => {
                 this.consumerDatas(message);
             });
         }
@@ -94,7 +93,6 @@ class ReportTaskService extends Service {
             json.time = query.time;
 
             this.getWebItemDataForKafka(query);
-
         } catch (err) {
             this.app.coreLogger.error(`kafka 消息队列消费消息 error ${err}`);
             console.log(err);
@@ -149,14 +147,11 @@ class ReportTaskService extends Service {
             query.create_time.$gt = beginTime;
         }
         /*
-        * 请求db1数据库进行同步数据
-        *  查询db1是否正常,不正常则重启
-        */
+         * 请求db1数据库进行同步数据
+         *  查询db1是否正常,不正常则重启
+         */
         try {
-            const datas = await this.ctx.model.Web.WebReport.find(query)
-                .read('sp')
-                .sort({ create_time: 1 })
-                .exec();
+            const datas = await this.ctx.model.Web.WebReport.find(query).read('sp').sort({ create_time: 1 }).exec();
             this.app.logger.info(`-----------db1--查询web端db1数据库是否可用---${datas.length}-------`);
             // 储存数据
             this.commonSaveDatas(datas);
@@ -221,7 +216,7 @@ class ReportTaskService extends Service {
                 resourceList: item.resource_list,
                 screenwidth: item.screenwidth,
                 screenheight: item.screenheight,
-                isFristIn: item.is_first_in,
+                isFristIn: item.is_first_in
             });
 
             if (system.is_statisi_pages === 0 && querytype === 1) this.savePages(item, system.slow_page_time);
@@ -244,7 +239,7 @@ class ReportTaskService extends Service {
             mark_page: query.markPage || this.app.randomString(),
             mark_user: query.markUser || '',
             mark_uv: query.markUv || '',
-            url: query.url,
+            url: query.url
         };
 
         if (type === 1) {
@@ -257,13 +252,13 @@ class ReportTaskService extends Service {
                 error_list: query.errorList,
                 resource_list: query.resourceList,
                 screenwidth: query.screenwidth,
-                screenheight: query.screenheight,
+                screenheight: query.screenheight
             });
         } else if (type === 2 || type === 3) {
             // AJAX性能
             item = Object.assign(item, {
                 error_list: query.errorList,
-                resource_list: query.resourceList,
+                resource_list: query.resourceList
             });
         }
         return item;
@@ -285,11 +280,7 @@ class ReportTaskService extends Service {
                 let totalSize = 0;
                 const sourslist = item.resource_list || [];
                 for (let i = 0; i < sourslist.length; i++) {
-                    if (
-                        sourslist[i].decodedBodySize &&
-                        sourslist[i].type !== 'fetchrequest' &&
-                        sourslist[i].type !== 'xmlhttprequest'
-                    ) {
+                    if (sourslist[i].decodedBodySize && sourslist[i].type !== 'fetchrequest' && sourslist[i].type !== 'xmlhttprequest') {
                         totalSize += sourslist[i].decodedBodySize;
                     }
                 }
@@ -333,7 +324,7 @@ class ReportTaskService extends Service {
         if (!data.resource_list && !data.resource_list.length) return;
 
         // 遍历所有资源进行存储
-        data.resource_list.forEach(item => {
+        data.resource_list.forEach((item) => {
             if (item.type === 'xmlhttprequest' || item.type === 'fetchrequest') {
                 if (system.is_statisi_ajax === 0) this.saveAjaxs(data, item, system.slow_ajax_time);
             } else {
@@ -414,7 +405,7 @@ class ReportTaskService extends Service {
     // 存储错误信息
     saveErrors(data) {
         if (!data.error_list && !data.error_list.length) return;
-        data.error_list.forEach(item => {
+        data.error_list.forEach((item) => {
             const newurl = url.parse(item.data.resourceUrl || '');
             const newName = newurl.protocol + '//' + newurl.host + newurl.pathname;
             const querydata = newurl.query ? JSON.stringify(querystring.parse(newurl.query)) : '{}';

@@ -9,7 +9,7 @@ class LdapService extends Service {
         const { server, ou, dc } = ctx.app.config.ldap;
         this.config = { ou, dc };
         this.client = ldap.createClient({
-            url: server,
+            url: server
         });
     }
 
@@ -29,14 +29,14 @@ class LdapService extends Service {
                     this.ctx.logger.error(`ldap search error:${err.stack}`);
                     reject(err);
                 }
-                res.on('searchEntry', entry => {
+                res.on('searchEntry', (entry) => {
                     resolve(entry.object);
                 });
-                res.on('error', err => {
+                res.on('error', (err) => {
                     this.ctx.logger.error(`ldap search searchEntry error:${err.stack}`);
                     reject(err);
                 });
-                res.on('end', err => {
+                res.on('end', (err) => {
                     if (err) reject(err);
                 });
             });

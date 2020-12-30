@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class RemoveController extends Controller {
-
     // 清空db1 1日之前无用数据
     async deleteDb1WebData() {
         const { ctx } = this;
@@ -11,7 +10,7 @@ class RemoveController extends Controller {
 
         const result = await ctx.service.remove.deleteDb1WebData(query.type);
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -26,10 +25,9 @@ class RemoveController extends Controller {
 
         const result = await ctx.service.remove.deleteDb2WebData(appId, number, query.type);
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
-
 }
 
 module.exports = RemoveController;

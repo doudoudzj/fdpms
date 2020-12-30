@@ -2,7 +2,6 @@
 const parser = require('cron-parser');
 const Service = require('egg').Service;
 class PvuvipTaskService extends Service {
-
     // 获得web端 pvuvip
     async getWebPvUvIpByDay() {
         const interval = parser.parseExpression(this.app.config.pvuvip_task_day_time);
@@ -26,7 +25,7 @@ class PvuvipTaskService extends Service {
     // 对数据进行分组
     groupData(datas, type, query, beginTime, endTime) {
         if (!datas && !datas.length) return;
-        datas.forEach(item => {
+        datas.forEach((item) => {
             // pvuvip
             this.savePvUvIpData(item, beginTime, type, query);
             // top排行
@@ -45,11 +44,11 @@ class PvuvipTaskService extends Service {
 
             let data = [];
             if (type === 1) {
-                data = await Promise.all([ pvpro, uvpro, ippro, ajpro, flpro ]);
+                data = await Promise.all([pvpro, uvpro, ippro, ajpro, flpro]);
             } else if (type === 2) {
                 const user = Promise.resolve(this.ctx.service.web.pvuvip.user(appId, query));
                 const bounce = Promise.resolve(this.ctx.service.web.pvuvip.bounce(appId, query));
-                data = await Promise.all([ pvpro, uvpro, ippro, ajpro, flpro, user, bounce ]);
+                data = await Promise.all([pvpro, uvpro, ippro, ajpro, flpro, user, bounce]);
             }
             const pv = data[0] || 0;
             const uv = data[1].length ? data[1][0].count : 0;
@@ -66,7 +65,7 @@ class PvuvipTaskService extends Service {
             pvuvip.ip = ip;
             pvuvip.ajax = ajax;
             pvuvip.flow = flow;
-            if (type === 2) pvuvip.bounce = bounce ? (bounce / pv * 100).toFixed(2) + '%' : 0;
+            if (type === 2) pvuvip.bounce = bounce ? ((bounce / pv) * 100).toFixed(2) + '%' : 0;
             if (type === 2) pvuvip.depth = pv && user ? parseInt(pv / user) : 0;
             pvuvip.create_time = endTime;
             pvuvip.type = type;
@@ -74,24 +73,28 @@ class PvuvipTaskService extends Service {
 
             // 触发日报邮件
             if (type === 2) {
-                this.ctx.service.web.sendEmail.getDaliyDatas({
-                    appId,
-                    pv,
-                    uv,
-                    ip,
-                    ajax,
-                    flow,
-                    bounce: bounce ? (bounce / pv * 100).toFixed(2) + '%' : 0,
-                    depth: pv && user ? parseInt(pv / user) : 0,
-                }, 'pvuvip');
+                this.ctx.service.web.sendEmail.getDaliyDatas(
+                    {
+                        appId,
+                        pv,
+                        uv,
+                        ip,
+                        ajax,
+                        flow,
+                        bounce: bounce ? ((bounce / pv) * 100).toFixed(2) + '%' : 0,
+                        depth: pv && user ? parseInt(pv / user) : 0
+                    },
+                    'pvuvip'
+                );
             }
             // 流量峰值 超过历史top邮件触达
             if (type === 1) {
                 this.ctx.service.emails.highestPvTipsEmail({ appId, pv, uv, ip, ajax, flow });
             }
-        } catch (err) { console.log(err); }
+        } catch (err) {
+            console.log(err);
+        }
     }
-
 }
 
 module.exports = PvuvipTaskService;

@@ -1,15 +1,9 @@
 'use strict';
 
-module.exports = app => {
+module.exports = (app) => {
     const apiV1Router = app.router.namespace('/api/v1/');
     const { controller, middleware } = app;
-    const {
-        user,
-        remove,
-        system,
-        errors,
-        emails,
-    } = controller.api;
+    const { user, remove, system, errors, emails } = controller.api;
 
     // 校验用户是否登录中间件
     const tokenRequired = middleware.tokenRequired();
@@ -72,5 +66,4 @@ module.exports = app => {
     apiV1Router.post('emails/add', tokenRequired, emails.addEmail);
 
     apiV1Router.post('emails/delete', tokenRequired, emails.deleteEmail);
-
 };

@@ -3,7 +3,6 @@
 const Service = require('egg').Service;
 
 class ReportService extends Service {
-
     // 保存用户上报的数据
     async saveWxReportData(ctx) {
         const query = ctx.request.body;

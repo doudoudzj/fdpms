@@ -19,7 +19,7 @@ class IpTaskService extends Service {
         await this.ipCityFileCache();
 
         // 遍历
-        apps.forEach(item => {
+        apps.forEach((item) => {
             this.saveWebGetIpDatasByOne(item);
         });
     }
@@ -48,7 +48,9 @@ class IpTaskService extends Service {
                 beginTime = new Date(new Date(beginTime).getTime() + 1000);
                 query.create_time = { $gt: beginTime };
             }
-            const datas = await this.app.models.WebEnvironment(appId).find(query)
+            const datas = await this.app.models
+                .WebEnvironment(appId)
+                .find(query)
                 .read('sp')
                 .limit(this.app.config.ip_thread * 60)
                 .sort({ create_time: 1 })
@@ -123,13 +125,13 @@ class IpTaskService extends Service {
         try {
             const url = `https://api.map.baidu.com/location/ip?ip=${ip}&ak=${this.app.config.BAIDUAK}&coor=bd09ll`;
             const result = await this.app.curl(url, {
-                dataType: 'json',
+                dataType: 'json'
             });
             if (result.data.status === 0 && result.data.content) {
                 const json = {
                     _ip: ip,
                     province: result.data.content.address_detail.province,
-                    city: result.data.content.address_detail.city,
+                    city: result.data.content.address_detail.city
                 };
                 if (!this.cacheArr.includes(copyip)) {
                     this.cacheArr.push(copyip);
@@ -162,11 +164,10 @@ class IpTaskService extends Service {
     }
     // 更新IP相关信息
     async updateWebEnvironment(data, id, appId) {
-        const result = await this.app.models.WebEnvironment(appId).update(
-            { _id: id },
-            { $set: { province: data.province, city: data.city } },
-            { upsert: true }
-        ).exec();
+        const result = await this.app.models
+            .WebEnvironment(appId)
+            .update({ _id: id }, { $set: { province: data.province, city: data.city } }, { upsert: true })
+            .exec();
         return result;
     }
 }

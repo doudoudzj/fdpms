@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class AjaxsController extends Controller {
-
     // 平均页面性能列表
     async getPageAjaxsAvg() {
         const { ctx } = this;
@@ -19,7 +18,7 @@ class AjaxsController extends Controller {
         const result = await ctx.service.wx.ajaxs.getPageAjaxsAvg(appId, url, beginTime, endTime);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -34,7 +33,7 @@ class AjaxsController extends Controller {
         const result = await ctx.service.wx.ajaxs.getAverageAjaxList(ctx);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
     // 获得单个api的平均性能数据
@@ -53,7 +52,7 @@ class AjaxsController extends Controller {
         const result = await ctx.service.wx.ajaxs.getOneAjaxAvg(appId, url, beginTime, endTime, type);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
     // 获得单个api的性能列表数据
@@ -74,7 +73,7 @@ class AjaxsController extends Controller {
         const result = await ctx.service.wx.ajaxs.getOneAjaxList(appId, url, pageNo, pageSize, beginTime, endTime, type);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -91,7 +90,7 @@ class AjaxsController extends Controller {
         const result = await ctx.service.wx.ajaxs.getOneAjaxDetail(appId, id);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

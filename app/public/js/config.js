@@ -1,4 +1,3 @@
-
 'use strict';
 
 const config = {
@@ -24,7 +23,7 @@ const config = {
     containerShowTime: 10,
 
     // pagesize 分页数量
-    pageSize: 50,
+    pageSize: 50
 };
 
 window.config = config; // eslint-disable-line

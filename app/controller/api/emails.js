@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class EmailsController extends Controller {
-
     async getList() {
         const { ctx } = this;
         const query = ctx.request.query;
@@ -14,7 +13,7 @@ class EmailsController extends Controller {
         const result = await ctx.service.emails.getList(pageNo, pageSize, email);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -29,7 +28,7 @@ class EmailsController extends Controller {
         const result = await ctx.service.emails.addEmail(email, name);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -45,7 +44,7 @@ class EmailsController extends Controller {
         const result = await ctx.service.emails.deleteEmail(id, systemIds, email);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

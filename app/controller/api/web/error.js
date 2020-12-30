@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class ErrorController extends Controller {
-
     // 获得error分类列表
     async getAverageErrorList() {
         const { ctx } = this;
@@ -15,7 +14,7 @@ class ErrorController extends Controller {
         const result = await ctx.service.web.errors.getAverageErrorList(ctx);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -37,7 +36,7 @@ class ErrorController extends Controller {
         const result = await ctx.service.web.errors.getOneErrorList(appId, url, category, pageNo, pageSize, beginTime, endTime);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -53,11 +52,10 @@ class ErrorController extends Controller {
         if (!appId) throw new Error('单个Resource性能列表数据：appId不能为空');
         if (!url) throw new Error('单个Resource性能列表数据：api地址不能为空');
 
-
         const result = await ctx.service.web.resource.getOneResourceList(appId, url, pageNo, pageSize);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -74,7 +72,7 @@ class ErrorController extends Controller {
         const result = await ctx.service.web.errors.getErrorDetail(appId, id);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

@@ -1,3 +1,4 @@
+buildlogs/
 logs/
 config/config.prod_1.js
 npm-debug.log
@@ -11,4 +12,3 @@ run/
 .DS_Store
 *.sw*
 *.un~
-buildlogs/

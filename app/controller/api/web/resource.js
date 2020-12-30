@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class ResourceController extends Controller {
-
     // 根据某个页面获得资源列表
     async getResourceForType() {
         const { ctx } = this;
@@ -20,7 +19,7 @@ class ResourceController extends Controller {
         const result = await ctx.service.web.resource.getResourceForType(appId, url, speedType, pageNo, pageSize);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -35,7 +34,7 @@ class ResourceController extends Controller {
         const result = await ctx.service.web.resource.getAverageResourceList(ctx);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -54,7 +53,7 @@ class ResourceController extends Controller {
         const result = await ctx.service.web.resource.getOneResourceAvg(appId, url, beginTime, endTime);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -72,11 +71,10 @@ class ResourceController extends Controller {
         if (!appId) throw new Error('单个Resource性能列表数据：appId不能为空');
         if (!url) throw new Error('单个Resource性能列表数据：api地址不能为空');
 
-
         const result = await ctx.service.web.resource.getOneResourceList(appId, url, pageNo, pageSize, beginTime, endTime);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -93,7 +91,7 @@ class ResourceController extends Controller {
         const result = await ctx.service.web.resource.getOneResourceDetail(appId, id);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

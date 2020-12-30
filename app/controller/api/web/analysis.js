@@ -2,7 +2,6 @@
 const Controller = require('egg').Controller;
 
 class AnalysisController extends Controller {
-
     // 用户漏斗分析列表
     async getAnalysislist() {
         const { ctx } = this;
@@ -19,7 +18,7 @@ class AnalysisController extends Controller {
         const result = await ctx.service.web.analysis.getAnalysislist(appId, beginTime, endTime, ip, pageNo, pageSize);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -36,7 +35,7 @@ class AnalysisController extends Controller {
         const result = await ctx.service.web.analysis.getAnalysisOneList(appId, markuser);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -52,7 +51,7 @@ class AnalysisController extends Controller {
 
         const result = await ctx.service.web.analysis.getTopDatas(appId, beginTime, endTime, type);
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -68,7 +67,7 @@ class AnalysisController extends Controller {
 
         const result = await ctx.service.web.analysis.getProvinceAvgCount(appId, beginTime, endTime, type);
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 }

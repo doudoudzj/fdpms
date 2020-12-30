@@ -30,23 +30,22 @@ class ReportController extends Controller {
     // 通过redis 消息队列消费数据
     async saveWebReportDataForRedis(query) {
         try {
-            if (this.app.config.redis_consumption.total_limit_web){
+            if (this.app.config.redis_consumption.total_limit_web) {
                 // 限流
                 const length = await this.app.redis.llen('web_repore_datas');
                 if (length >= this.app.config.redis_consumption.total_limit_web) return;
             }
             // 生产者
             this.app.redis.lpush('web_repore_datas', JSON.stringify(query));
-        } catch (e) { console.log(e); }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // 通过kafka 消息队列消费数据
     async saveWebReportDataForKafka(query) {
         // 生产者
-        this.app.kafka.send(
-            'web',
-            JSON.stringify(query)
-        );
+        this.app.kafka.send('web', JSON.stringify(query));
     }
 
     // 通过mongodb 数据库存储数据

@@ -3,14 +3,13 @@
 const Controller = require('egg').Controller;
 
 class WebController extends Controller {
-
     // 新增系统
     async webaddsystem() {
         const { ctx } = this;
         await ctx.render('web/addsystem', {
             data: {
-                title: '新增系统',
-            },
+                title: '新增系统'
+            }
         });
     }
 
@@ -19,8 +18,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/home', {
             data: {
-                title: '网页PV,UV,IP统计',
-            },
+                title: '网页PV,UV,IP统计'
+            }
         });
     }
 
@@ -29,8 +28,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/pagesavg', {
             data: {
-                title: '页面平均性能指标',
-            },
+                title: '页面平均性能指标'
+            }
         });
     }
 
@@ -39,8 +38,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/pageslist', {
             data: {
-                title: '页面性能数据列表',
-            },
+                title: '页面性能数据列表'
+            }
         });
     }
 
@@ -48,8 +47,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/pagedetails', {
             data: {
-                title: '页面性能详情数据',
-            },
+                title: '页面性能详情数据'
+            }
         });
     }
 
@@ -58,8 +57,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/slowpageslist', {
             data: {
-                title: '页面性能数据列表',
-            },
+                title: '页面性能数据列表'
+            }
         });
     }
 
@@ -68,8 +67,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/ajaxavg', {
             data: {
-                title: 'ajax平均性能指标',
-            },
+                title: 'ajax平均性能指标'
+            }
         });
     }
 
@@ -78,8 +77,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/ajaxdetail', {
             data: {
-                title: 'ajax详情',
-            },
+                title: 'ajax详情'
+            }
         });
     }
 
@@ -87,8 +86,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/ajaxitemdetail', {
             data: {
-                title: '单个ajax详情信息',
-            },
+                title: '单个ajax详情信息'
+            }
         });
     }
 
@@ -97,8 +96,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/resourcesavg', {
             data: {
-                title: '慢资源平均性能指标',
-            },
+                title: '慢资源平均性能指标'
+            }
         });
     }
 
@@ -107,8 +106,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/resourcesdetail', {
             data: {
-                title: '慢资源详情',
-            },
+                title: '慢资源详情'
+            }
         });
     }
 
@@ -116,8 +115,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/resourcesitemdetail', {
             data: {
-                title: '单个慢资源详情信息',
-            },
+                title: '单个慢资源详情信息'
+            }
         });
     }
 
@@ -126,8 +125,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/erroravg', {
             data: {
-                title: '错误分类列表',
-            },
+                title: '错误分类列表'
+            }
         });
     }
 
@@ -136,8 +135,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/errordetail', {
             data: {
-                title: '错误详情列表',
-            },
+                title: '错误详情列表'
+            }
         });
     }
     // 错误页面详情信息
@@ -145,8 +144,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/erroritemdetail', {
             data: {
-                title: '错误页面详情信息',
-            },
+                title: '错误页面详情信息'
+            }
         });
     }
     // web设置界面
@@ -154,8 +153,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/setting', {
             data: {
-                title: '系统设置',
-            },
+                title: '系统设置'
+            }
         });
     }
 
@@ -164,8 +163,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/analysislist', {
             data: {
-                title: '用户行为访问轨迹',
-            },
+                title: '用户行为访问轨迹'
+            }
         });
     }
 
@@ -174,8 +173,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/analysisdetail', {
             data: {
-                title: '用户访问轨迹详情',
-            },
+                title: '用户访问轨迹详情'
+            }
         });
     }
     // TOP分析
@@ -183,8 +182,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/top', {
             data: {
-                title: 'TOP指标',
-            },
+                title: 'TOP指标'
+            }
         });
     }
 
@@ -192,8 +191,8 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/diagram', {
             data: {
-                title: '全国省份访问量热力图',
-            },
+                title: '全国省份访问量热力图'
+            }
         });
     }
 
@@ -201,12 +200,10 @@ class WebController extends Controller {
         const { ctx } = this;
         await ctx.render('web/alarm', {
             data: {
-                title: '应用告警设置',
-            },
+                title: '应用告警设置'
+            }
         });
     }
-
 }
 
 module.exports = WebController;
-

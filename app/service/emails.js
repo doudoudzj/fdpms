@@ -4,7 +4,6 @@ const Service = require('egg').Service;
 const parser = require('cron-parser');
 
 class EmailsService extends Service {
-
     /*
      * 保存用户上报的数据
      *
@@ -23,11 +22,12 @@ class EmailsService extends Service {
 
         const count = Promise.resolve(this.ctx.model.Email.count(query).exec());
         const datas = Promise.resolve(
-            this.ctx.model.Email.find(query).skip((pageNos - 1) * pageSize)
+            this.ctx.model.Email.find(query)
+                .skip((pageNos - 1) * pageSize)
                 .limit(pageSize)
                 .exec()
         );
-        const all = await Promise.all([ count, datas ]);
+        const all = await Promise.all([count, datas]);
         const systemMags = {};
         const list = all[1] || [];
 
@@ -53,7 +53,7 @@ class EmailsService extends Service {
         return {
             datalist: list,
             totalNum: all[0],
-            pageNo: pageNos,
+            pageNo: pageNos
         };
     }
 
@@ -82,7 +82,7 @@ class EmailsService extends Service {
     async deleteEmail(id, systemIds, email) {
         const result = await this.ctx.model.Email.findOneAndRemove({ _id: id }).exec();
         if (systemIds && systemIds.length) {
-            systemIds.forEach(item => {
+            systemIds.forEach((item) => {
                 if (item.system_id && item.type === 'daliy') {
                     this.ctx.service.system.handleDaliyEmail(item.system_id, email, 2, false, 1);
                 } else if (item.system_id && item.type === 'highest') {
@@ -114,14 +114,9 @@ class EmailsService extends Service {
             str = '超过历史流量峰值邮件触达';
             type = 'highest';
         }
-        const handleData = handletype === 1 ?
-            { $push: { system_ids: { $each: [{ system_id: appId, desc: str, type }] } } } :
-            { $pull: { system_ids: { system_id: appId, type } } };
+        const handleData = handletype === 1 ? { $push: { system_ids: { $each: [{ system_id: appId, desc: str, type }] } } } : { $pull: { system_ids: { system_id: appId, type } } };
 
-        const result = await this.ctx.model.Email.update(
-            { email },
-            handleData,
-            { multi: true }).exec();
+        const result = await this.ctx.model.Email.update({ email }, handleData, { multi: true }).exec();
         return result;
     }
 
@@ -134,7 +129,7 @@ class EmailsService extends Service {
      */
     async highestPvTipsEmail(json = {}) {
         const { appId, pv, uv, ip, ajax, flow } = json;
-        const highestPv = parseInt(await this.app.redis.get(`${appId}_highest_pv_tips`) || 0);
+        const highestPv = parseInt((await this.app.redis.get(`${appId}_highest_pv_tips`)) || 0);
         if (pv <= highestPv || !pv) return;
         this.app.redis.set(`${appId}_highest_pv_tips`, pv);
 
@@ -163,11 +158,28 @@ class EmailsService extends Service {
                     <div style="margin-bottom:20px;">UV请求量：${uv || 0}</div>
                     <div style="margin-bottom:20px;">IP请求量：${ip || 0}</div>
                     <div style="margin-bottom:20px;">流量消费：${this.app.flow(flow) || 0}</div>
-                `,
+                `
         };
         this.app.email.sendMail(mailOptions);
     }
 
+    /*
+     * 发送测试邮件
+     *
+     * @param {String} [to]
+     * @returns
+     * @memberof EmailsService
+     */
+    async sendTestEmail(opt) {
+        const { to } = opt;
+        const mailOptions = {
+            from: `${this.app.config.name}<${this.app.config.email.client.auth.user}>`, // 性能监控系统<noreply@xxxx.com>
+            to,
+            subject: '测试',
+            html: '测试邮件'
+        };
+        this.app.email.sendMail(mailOptions);
+    }
 }
 
 module.exports = EmailsService;

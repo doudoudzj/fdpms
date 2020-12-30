@@ -3,7 +3,6 @@
 const Service = require('egg').Service;
 
 class ResourceService extends Service {
-
     // 单页页面性能数据列表（简单版本）
     async getResourceForType(appId, url, speedType, pageNo, pageSize) {
         pageNo = pageNo * 1;
@@ -12,24 +11,21 @@ class ResourceService extends Service {
 
         const query = { $match: { url, speed_type: speedType } };
 
-        const count = Promise.resolve(this.app.models.WebResource(appId).count(query.$match).read('sp')
-            .exec());
+        const count = Promise.resolve(this.app.models.WebResource(appId).count(query.$match).read('sp').exec());
         const datas = Promise.resolve(
-            this.app.models.WebResource(appId).aggregate([
-                query,
-                { $sort: { create_time: -1 } },
-                { $skip: (pageNo - 1) * pageSize },
-                { $limit: pageSize },
-            ]).read('sp')
+            this.app.models
+                .WebResource(appId)
+                .aggregate([query, { $sort: { create_time: -1 } }, { $skip: (pageNo - 1) * pageSize }, { $limit: pageSize }])
+                .read('sp')
                 .exec()
         );
-        const all = await Promise.all([ count, datas ]);
-        const [ totalNum, datalist ] = all;
+        const all = await Promise.all([count, datas]);
+        const [totalNum, datalist] = all;
 
         return {
             datalist,
             totalNum,
-            pageNo,
+            pageNo
         };
     }
 
@@ -55,18 +51,16 @@ class ResourceService extends Service {
 
         const group_id = {
             url: '$name',
-            method: '$method',
+            method: '$method'
         };
 
-        return url ? await this.oneThread(appId, queryjson, pageNo, pageSize, group_id)
-            : await this.moreThread(appId, type, beginTime, endTime, queryjson, pageNo, pageSize, group_id);
+        return url ? await this.oneThread(appId, queryjson, pageNo, pageSize, group_id) : await this.moreThread(appId, type, beginTime, endTime, queryjson, pageNo, pageSize, group_id);
     }
 
     // 平均求值数多线程
     async moreThread(appId, type, beginTime, endTime, queryjson, pageNo, pageSize, group_id) {
         const result = [];
-        let distinct = await this.app.models.WebResource(appId).distinct('name', queryjson.$match).read('sp')
-            .exec() || [];
+        let distinct = (await this.app.models.WebResource(appId).distinct('name', queryjson.$match).read('sp').exec()) || [];
         const copdistinct = distinct;
 
         const betinIndex = (pageNo - 1) * pageSize;
@@ -77,23 +71,26 @@ class ResourceService extends Service {
         for (let i = 0, len = distinct.length; i < len; i++) {
             resolvelist.push(
                 Promise.resolve(
-                    this.app.models.WebResource(appId).aggregate([
-                        { $match: { speed_type: type, name: distinct[i], create_time: { $gte: new Date(beginTime), $lte: new Date(endTime) } } },
-                        {
-                            $group: {
-                                _id: group_id,
-                                count: { $sum: 1 },
-                                duration: { $avg: '$duration' },
-                                body_size: { $avg: '$decoded_body_size' },
-                            },
-                        },
-                    ]).read('sp')
+                    this.app.models
+                        .WebResource(appId)
+                        .aggregate([
+                            { $match: { speed_type: type, name: distinct[i], create_time: { $gte: new Date(beginTime), $lte: new Date(endTime) } } },
+                            {
+                                $group: {
+                                    _id: group_id,
+                                    count: { $sum: 1 },
+                                    duration: { $avg: '$duration' },
+                                    body_size: { $avg: '$decoded_body_size' }
+                                }
+                            }
+                        ])
+                        .read('sp')
                         .exec()
                 )
             );
         }
-        const all = await Promise.all(resolvelist) || [];
-        all.forEach(item => {
+        const all = (await Promise.all(resolvelist)) || [];
+        all.forEach((item) => {
             result.push(item[0]);
         });
         /* eslint-disable */
@@ -113,38 +110,40 @@ class ResourceService extends Service {
         return {
             datalist: result,
             totalNum: copdistinct.length,
-            pageNo,
+            pageNo
         };
     }
 
     // 单个api接口查询平均信息
     async oneThread(appId, queryjson, pageNo, pageSize, group_id) {
-        const count = Promise.resolve(this.app.models.WebResource(appId).distinct('name', queryjson.$match).read('sp')
-            .exec());
+        const count = Promise.resolve(this.app.models.WebResource(appId).distinct('name', queryjson.$match).read('sp').exec());
         const datas = Promise.resolve(
-            this.app.models.WebResource(appId).aggregate([
-                queryjson,
-                {
-                    $group: {
-                        _id: group_id,
-                        count: { $sum: 1 },
-                        duration: { $avg: '$duration' },
-                        body_size: { $avg: '$decoded_body_size' },
+            this.app.models
+                .WebResource(appId)
+                .aggregate([
+                    queryjson,
+                    {
+                        $group: {
+                            _id: group_id,
+                            count: { $sum: 1 },
+                            duration: { $avg: '$duration' },
+                            body_size: { $avg: '$decoded_body_size' }
+                        }
                     },
-                },
-                { $skip: (pageNo - 1) * pageSize },
-                { $limit: pageSize },
-                { $sort: { count: -1 } },
-            ]).read('sp')
+                    { $skip: (pageNo - 1) * pageSize },
+                    { $limit: pageSize },
+                    { $sort: { count: -1 } }
+                ])
+                .read('sp')
                 .exec()
         );
-        const all = await Promise.all([ count, datas ]);
-        const [ totalNum, datalist ] = all;
+        const all = await Promise.all([count, datas]);
+        const [totalNum, datalist] = all;
 
         return {
             datalist,
             totalNum: totalNum.length,
-            pageNo,
+            pageNo
         };
     }
 
@@ -153,17 +152,20 @@ class ResourceService extends Service {
         const query = { $match: { name: url } };
         if (beginTime && endTime) query.$match.create_time = { $gte: new Date(beginTime), $lte: new Date(endTime) };
 
-        const datas = await this.app.models.WebResource(appId).aggregate([
-            query,
-            {
-                $group: {
-                    _id: null,
-                    count: { $sum: 1 },
-                    duration: { $avg: '$duration' },
-                    body_size: { $avg: '$decoded_body_size' },
-                },
-            },
-        ]).read('sp')
+        const datas = await this.app.models
+            .WebResource(appId)
+            .aggregate([
+                query,
+                {
+                    $group: {
+                        _id: null,
+                        count: { $sum: 1 },
+                        duration: { $avg: '$duration' },
+                        body_size: { $avg: '$decoded_body_size' }
+                    }
+                }
+            ])
+            .read('sp')
             .exec();
 
         return datas && datas.length ? datas[0] : {};
@@ -177,31 +179,27 @@ class ResourceService extends Service {
         const query = { $match: { name: url } };
         if (beginTime && endTime) query.$match.create_time = { $gte: new Date(beginTime), $lte: new Date(endTime) };
 
-        const count = Promise.resolve(this.app.models.WebResource(appId).count(query.$match).read('sp')
-            .exec());
+        const count = Promise.resolve(this.app.models.WebResource(appId).count(query.$match).read('sp').exec());
         const datas = Promise.resolve(
-            this.app.models.WebResource(appId).aggregate([
-                query,
-                { $sort: { create_time: -1 } },
-                { $skip: (pageNo - 1) * pageSize },
-                { $limit: pageSize },
-            ]).read('sp')
+            this.app.models
+                .WebResource(appId)
+                .aggregate([query, { $sort: { create_time: -1 } }, { $skip: (pageNo - 1) * pageSize }, { $limit: pageSize }])
+                .read('sp')
                 .exec()
         );
-        const all = await Promise.all([ count, datas ]);
-        const [ totalNum, datalist ] = all;
+        const all = await Promise.all([count, datas]);
+        const [totalNum, datalist] = all;
 
         return {
             datalist,
             totalNum,
-            pageNo,
+            pageNo
         };
     }
 
     // 获得单个Resource详情信息
     async getOneResourceDetail(appId, id) {
-        return await this.app.models.WebResource(appId).findOne({ _id: id }).read('sp')
-            .exec() || {};
+        return (await this.app.models.WebResource(appId).findOne({ _id: id }).read('sp').exec()) || {};
     }
 }
 

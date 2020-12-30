@@ -3,7 +3,6 @@ const parser = require('cron-parser');
 const Service = require('egg').Service;
 
 class RemoveService extends Service {
-
     /*
      * 定时删除原始上报数据 一天删一次
      *
@@ -58,7 +57,7 @@ class RemoveService extends Service {
             const remove4 = Promise.resolve(this.app.models.WebErrors(appId).remove(query).exec());
             // Resource
             const remove5 = Promise.resolve(this.app.models.WebResource(appId).remove(query).exec());
-            result = await Promise.all([ remove1, remove2, remove3, remove4, remove5 ]);
+            result = await Promise.all([remove1, remove2, remove3, remove4, remove5]);
         } else if (type === 'wx') {
             // Ajax
             const remove1 = Promise.resolve(this.ctx.model.Wx.WxAjaxs.remove(query).exec());
@@ -66,7 +65,7 @@ class RemoveService extends Service {
             const remove2 = Promise.resolve(this.ctx.model.Wx.WxPages.remove(query).exec());
             // Errors
             const remove3 = Promise.resolve(this.ctx.model.Wx.WxErrors.remove(query).exec());
-            result = await Promise.all([ remove1, remove2, remove3 ]);
+            result = await Promise.all([remove1, remove2, remove3]);
         }
         return result;
     }

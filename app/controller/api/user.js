@@ -3,7 +3,6 @@
 const Controller = require('egg').Controller;
 
 class UserController extends Controller {
-
     // 用户登录
     async login() {
         const { ctx } = this;
@@ -17,7 +16,7 @@ class UserController extends Controller {
         const result = await ctx.service.user.login(userName, passWord);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -34,22 +33,23 @@ class UserController extends Controller {
         const result = await ctx.service.user.register(userName, passWord);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
     // 退出登录
     async logout() {
         const { ctx } = this;
-        const usertoken = ctx.cookies.get('usertoken', {
-            encrypt: true,
-            signed: true,
-        }) || '';
+        const usertoken =
+            ctx.cookies.get('usertoken', {
+                encrypt: true,
+                signed: true
+            }) || '';
         if (!usertoken) throw new Error('退出登录：token不能为空');
 
         await ctx.service.user.logout(usertoken);
         this.ctx.body = this.app.result({
-            data: {},
+            data: {}
         });
     }
 
@@ -64,7 +64,7 @@ class UserController extends Controller {
         const result = await ctx.service.user.getUserList(pageNo, pageSize, userName);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -81,7 +81,7 @@ class UserController extends Controller {
         const result = await ctx.service.user.setIsUse(id, isUse, usertoken);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -97,7 +97,7 @@ class UserController extends Controller {
         const result = await ctx.service.user.delete(id, usertoken);
 
         ctx.body = this.app.result({
-            data: result,
+            data: result
         });
     }
 
@@ -112,31 +112,31 @@ class UserController extends Controller {
                 data: {
                     client_id: this.app.config.github.client_id,
                     client_secret: this.app.config.github.client_secret,
-                    code: query_code,
+                    code: query_code
                 },
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
             if (tokenResult.status !== 200) {
                 await ctx.render('github', {
                     data: {
                         title: 'github login',
-                        data: JSON.stringify({ desc: tokenResult.data.error, type: 'github' }),
-                    },
+                        data: JSON.stringify({ desc: tokenResult.data.error, type: 'github' })
+                    }
                 });
                 return;
             }
 
             const userResult = await ctx.curl(`https://api.github.com/user?access_token=${tokenResult.data.access_token}`, {
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
             if (userResult.status !== 200) {
                 await ctx.render('github', {
                     data: {
                         title: 'github login',
-                        data: JSON.stringify({ desc: userResult.data.error, type: 'github' }),
-                    },
+                        data: JSON.stringify({ desc: userResult.data.error, type: 'github' })
+                    }
                 });
                 return;
             }
@@ -151,8 +151,8 @@ class UserController extends Controller {
             await ctx.render('github', {
                 data: {
                     title: 'github login',
-                    data: JSON.stringify(result),
-                },
+                    data: JSON.stringify(result)
+                }
             });
         } catch (err) {
             const result = { desc: 'github 权限验证失败, 请重试！', type: 'github' };
@@ -162,8 +162,8 @@ class UserController extends Controller {
             await ctx.render('github', {
                 data: {
                     title: 'github login',
-                    data: JSON.stringify(result),
-                },
+                    data: JSON.stringify(result)
+                }
             });
         }
     }
@@ -180,14 +180,14 @@ class UserController extends Controller {
                 contentType: 'json',
                 data: '',
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
             if (tokenResult.status !== 200) {
                 await ctx.render('github', {
                     data: {
                         title: 'weibo login',
-                        data: JSON.stringify({ desc: tokenResult.data.error_description || '微博授权有误!', type: 'weibo' }),
-                    },
+                        data: JSON.stringify({ desc: tokenResult.data.error_description || '微博授权有误!', type: 'weibo' })
+                    }
                 });
                 return;
             }
@@ -196,20 +196,20 @@ class UserController extends Controller {
                 contentType: 'json',
                 data: '',
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
             if (getTokenInfo.status !== 200) {
                 await ctx.render('github', {
                     data: {
                         title: 'weibo get access_token',
-                        data: JSON.stringify({ desc: tokenResult.data.error_description || '微博获取access_token有误!', type: 'weibo' }),
-                    },
+                        data: JSON.stringify({ desc: tokenResult.data.error_description || '微博获取access_token有误!', type: 'weibo' })
+                    }
                 });
                 return;
             }
             const getUserInfo = await ctx.curl(`https://api.weibo.com/2/users/show.json?access_token=${tokenResult.data.access_token}&uid=${getTokenInfo.data.uid}`, {
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
 
             let result = {};
@@ -222,10 +222,9 @@ class UserController extends Controller {
             await ctx.render('github', {
                 data: {
                     title: 'weibo login',
-                    data: JSON.stringify(result),
-                },
+                    data: JSON.stringify(result)
+                }
             });
-
         } catch (err) {
             const result = { desc: '新浪微博授权失败,请重试！', type: 'weibo' };
             if (err.toString().indexOf('timeout') > -1) {
@@ -234,8 +233,8 @@ class UserController extends Controller {
             await ctx.render('github', {
                 data: {
                     title: 'weibo login',
-                    data: JSON.stringify(result),
-                },
+                    data: JSON.stringify(result)
+                }
             });
         }
     }
@@ -252,14 +251,14 @@ class UserController extends Controller {
                 contentType: 'json',
                 data: '',
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
             if (tokenResult.status !== 200 && tokenResult.data.errcode) {
                 await ctx.render('github', {
                     data: {
                         title: 'wechat login',
-                        data: JSON.stringify({ desc: tokenResult.data.errmsg || '微信授权有误!', type: 'wechat' }),
-                    },
+                        data: JSON.stringify({ desc: tokenResult.data.errmsg || '微信授权有误!', type: 'wechat' })
+                    }
                 });
                 return;
             }
@@ -269,14 +268,14 @@ class UserController extends Controller {
                 contentType: 'json',
                 data: '',
                 dataType: 'json',
-                timeout: 8000,
+                timeout: 8000
             });
             if (getUserMsg.status !== 200 && getUserMsg.data.errcode) {
                 await ctx.render('github', {
                     data: {
                         title: 'wechat login',
-                        data: JSON.stringify({ desc: getUserMsg.data.errmsg || '微信授权有误!', type: 'wechat' }),
-                    },
+                        data: JSON.stringify({ desc: getUserMsg.data.errmsg || '微信授权有误!', type: 'wechat' })
+                    }
                 });
                 return;
             }
@@ -291,10 +290,9 @@ class UserController extends Controller {
             await ctx.render('github', {
                 data: {
                     title: 'wechat login',
-                    data: JSON.stringify(result),
-                },
+                    data: JSON.stringify(result)
+                }
             });
-
         } catch (err) {
             const result = { desc: '微信登录授权失败,请重试！', type: 'wechat' };
             if (err.toString().indexOf('timeout') > -1) {
@@ -303,8 +301,8 @@ class UserController extends Controller {
             await ctx.render('github', {
                 data: {
                     title: 'wechat login',
-                    data: JSON.stringify(result),
-                },
+                    data: JSON.stringify(result)
+                }
             });
         }
     }
