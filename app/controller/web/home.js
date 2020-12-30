@@ -1,13 +1,14 @@
 'use strict';
 
-const Controller = require('egg').Controller;
+const BaseController = require('../base');
 
-class HomeController extends Controller {
+class HomeController extends BaseController {
     // 系统应用列表
     async systemlist() {
-        const { ctx } = this;
-        await ctx.render('home', {
+        // const { ctx } = this;
+        await this.ctx.render('home', {
             data: {
+                page: 'home',
                 title: '应用列表'
             }
         });
@@ -15,8 +16,8 @@ class HomeController extends Controller {
 
     // 新增系统选择应用类型
     async selectype() {
-        const { ctx } = this;
-        await ctx.render('selectype', {
+        // const { ctx } = this;
+        await this.ctx.render('selectype', {
             data: {
                 title: '选择应用类型'
             }
@@ -28,6 +29,7 @@ class HomeController extends Controller {
         const { ctx } = this;
         await ctx.render('login', {
             data: {
+                name: this.app.config.name,
                 title: '登录系统',
                 gh_client_id: this.app.config.github.client_id,
                 gh_scope: this.app.config.github.scope,
@@ -38,12 +40,12 @@ class HomeController extends Controller {
         });
     }
 
-    // 系统列表
-    async systems() {
+    // 应用系统列表
+    async apps() {
         const { ctx } = this;
-        await ctx.render('systems', {
+        await ctx.render('apps', {
             data: {
-                title: '系统列表'
+                title: '应用系统列表'
             }
         });
     }
@@ -68,7 +70,7 @@ class HomeController extends Controller {
         });
     }
 
-    // 系统重启信息
+    // 邮件管理
     async emails() {
         const { ctx } = this;
         await ctx.render('emails', {

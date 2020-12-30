@@ -1,13 +1,4 @@
 <style scoped>
-    .home_body {
-        width: 80%;
-        margin: 100px auto 100px;
-    }
-
-    .com_block table.table .btn {
-        padding: 5px 8px;
-    }
-
     .table .user {
         display: inline-block;
         padding: 5px 8px;
@@ -88,11 +79,11 @@
         margin-bottom: 0px;
     }
 </style>
-<div class="com_content home_body" id="home_body" v-cloak>
+<div class="com_content" id="home_body" v-cloak>
     <div class="com_title">
         <div class="h1">邮件列表</div>
         <div class="right">
-            <button class="btn btn-main" @click="showModel=true">+添加邮件</button>
+            <button class="btn btn-main" @click="showModel=true">+ 添加邮件</button>
         </div>
     </div>
     <div v-if="isLoadend && datalist.length">
@@ -161,7 +152,7 @@
                 isLoadend: false,
                 email: '',
                 name: ''
-            }
+            };
         },
         filters: {
             systemType: window.Filter.systemType,
@@ -205,20 +196,20 @@
                 if (!util.regCombination('e').test(this.email)) {
                     popup.miss({
                         title: '请填写邮件地址!'
-                    })
+                    });
                     return false;
-                };
+                }
                 if (!util.regCombination('*').test(this.name)) {
                     popup.miss({
                         title: '请填写邮件所属人!'
-                    })
+                    });
                     return false;
-                };
+                }
                 util.ajax({
                     url: config.baseApi + 'api/v1/emails/add',
                     data: {
                         email: this.email,
-                        name: this.name,
+                        name: this.name
                     },
                     success: (data) => {
                         this.showModel = false;
@@ -229,12 +220,12 @@
                             title: '操作成功!'
                         });
                     }
-                })
+                });
             },
             testEmail(item) {
                 popup.confirm({
                     title: '发送测试邮件？',
-                    yes() {
+                    yes: () => {
                         util.ajax({
                             url: `${config.baseApi}api/v1/emails/test`,
                             data: {
@@ -243,11 +234,16 @@
                             success: data => {
                                 popup.miss({
                                     title: '已发送!'
-                                })
+                                });
                             }
-                        })
+                        });
+                    },
+                    no: () => {
+                        popup.miss({
+                            title: '取消!'
+                        });
                     }
-                })
+                });
             },
             deleteEmail(item) {
                 const _this = this;
@@ -267,6 +263,11 @@
                                     title: '操作成功!'
                                 })
                             }
+                        })
+                    },
+                    no: () => {
+                        popup.miss({
+                            title: '操作取消!'
                         })
                     }
                 })

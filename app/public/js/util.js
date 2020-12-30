@@ -1,11 +1,9 @@
-/* eslint-disable */
-
 'use strict';
 
 // 时间格式化
 if (!new Date().format) {
     Date.prototype.format = function (fmt) {
-        //author: meizz
+        // author: meizz
         var o = {
             'M+': this.getMonth() + 1, //月份
             'd+': this.getDate(), //日
@@ -30,9 +28,10 @@ class utilfn {
         this.UA = navigator.userAgent;
         this.isPC = this.UA.indexOf('Windows NT') > -1;
         this.isAndroid = this.UA.indexOf('Android') > -1;
-        this.isIos = this.UA.indexOf('Mac OS X') > -1;
+        this.isIos = this.UA.indexOf('iOS') > -1;
         this.isIphone = this.UA.indexOf('iPhone;') > -1;
         this.isIpad = this.UA.indexOf('iPad;') > -1;
+        this.isMac = this.UA.indexOf('Mac OS X') > -1 && !this.isIos && !this.isIpad && !this.isIphone;
         this.isIE7 = this.UA.indexOf('MSIE 7.0;') > -1;
         this.isIE8 = this.UA.indexOf('MSIE 8.0;') > -1;
         this.isIE9 = this.UA.indexOf('MSIE 9.0;') > -1;
@@ -291,12 +290,12 @@ class utilfn {
         return newJson;
     }
 
-    //showLoading
+    // showLoading
     showLoading() {
         $('#loading').stop().show();
     }
 
-    //hideLoading
+    // hideLoading
     hideLoading() {
         $('#loading').stop().hide();
     }
@@ -400,5 +399,5 @@ class utilfn {
     }
 }
 
-//初始化util对象
+// 初始化util对象
 window.util = new utilfn();

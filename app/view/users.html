@@ -1,14 +1,4 @@
-<style scoped>
-    .home_body {
-        width: 80%;
-        margin: 100px auto 100px;
-    }
-    
-    .com_block table.table .btn {
-        padding: 5px 8px;
-    }
-</style>
-<div class="com_content home_body" id="home_body" v-if="userMsg.level==0?true:false" v-cloak>
+<div class="com_content" id="home_body" v-if="userMsg.level==0?true:false" v-cloak>
     <div class="com_title">
         <div class="h1">用户列表</div>
         <div class="right">
@@ -79,12 +69,11 @@
                 })
                 return;
             }
-
             this.getUserList();
         },
         methods: {
             addsystem() {
-                location.href = `/selectype`
+                location.href = '/apps/select'
             },
             getUserList() {
                 this.isLoadend = false;

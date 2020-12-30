@@ -1,13 +1,4 @@
 <style scoped>
-    .home_body {
-        width: 80%;
-        margin: 100px auto 100px;
-    }
-    
-    .com_block table.table .btn {
-        padding: 5px 8px;
-    }
-    
     .table .user {
         display: inline-block;
         padding: 5px 8px;
@@ -20,38 +11,38 @@
         font-weight: bold;
         margin: 0 10px 10px 0;
     }
-    
+
     .table .user .iconfont {
         color: #aaa;
         font-size: 20px;
         margin-left: 5px;
     }
-    
+
     .com_model .content {
         width: 800px;
         height: 600px;
     }
-    
+
     .com_model .content .main {
         padding: 20px;
     }
-    
+
     .com_model .content .iconfont {
         font-size: 30px;
         color: #aaa;
         margin: 0px 20px 0 0;
         cursor: pointer;
     }
-    
+
     .com_search {
         padding: 0;
     }
 </style>
-<div class="com_content home_body" id="home_body" v-if="userMsg.level==0?true:false" v-cloak>
+<div class="com_content" id="home_body" v-if="userMsg.level==0?true:false" v-cloak>
     <div class="com_title">
-        <div class="h1">系统列表</div>
+        <div class="h1">应用列表</div>
         <div class="right">
-            <button class="btn btn-main" @click="addsystem">+添加应用</button>
+            <button class="btn btn-main" @click="addsystem">+ 添加应用</button>
         </div>
     </div>
     <div v-if="isLoadend && datalist.length">
@@ -75,7 +66,9 @@
                         <td class="tc">{{item.app_id}}</td>
                         <td class="tc">{{item.is_use==0?'是':'否'}}</td>
                         <td class="tc">
-                            <span class="user" v-for="user in item.userlist" @click="deleteUser(item,user)">{{user.user_name}}<span class="iconfont">&#xe674;</span></span>
+                            <span class="user" v-for="user in item.userlist"
+                                @click="deleteUser(item,user)">{{user.user_name}}<span
+                                    class="iconfont">&#xe674;</span></span>
                         </td>
                         <td class="tc">
                             <button class="btn btn-main" @click="addUser(item)">分配用户</button>
@@ -133,7 +126,7 @@
 <script>
     new Vue({
         el: '#home_body',
-        data: function() {
+        data: function () {
             return {
                 userId: '',
                 datalist: [],
@@ -158,15 +151,17 @@
 
             // 非管理员禁止查看此页面
             if (this.userMsg.level !== 0) {
-				popup.confirm({
-					title: '你无权限访问此页面，请返回', yes: () => {
-						window.history.back();
-					}, no: () => {
-						window.history.back();
-					}
-				})
-				return;
-			}
+                popup.confirm({
+                    title: '你无权限访问此页面，请返回',
+                    yes: () => {
+                        window.history.back();
+                    },
+                    no: () => {
+                        window.history.back();
+                    }
+                })
+                return;
+            }
 
             this.getMsgForUserId();
         },
@@ -184,7 +179,7 @@
                 })
             },
             addsystem() {
-                location.href = `/selectype`
+                location.href = '/apps/select'
             },
             selectSystem(type, item) {
                 if (type === 1) {

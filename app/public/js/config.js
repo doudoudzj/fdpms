@@ -1,5 +1,5 @@
 'use strict';
-
+// 后台配置想
 const config = {
     // 登陆页面
     loginUrl: '/login',
@@ -26,4 +26,4 @@ const config = {
     pageSize: 50
 };
 
-window.config = config; // eslint-disable-line
+window.config = config;

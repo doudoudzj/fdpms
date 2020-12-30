@@ -1,140 +1,187 @@
 <style scoped>
-	.home_body {
-		width: 80%;
-		margin: 100px auto 100px;
-	}
-	.com_between:hover{
-		background:#f9f8ff;
-		cursor: pointer;
-	}
-	.com_between button.btn{
-		width:250px;
-	}
-	.com_between .left .icon{
-		width:auto;
-		font-size:60px;
-		color:#bbb;
-	}
-	@media (max-width: 768px) {
-		.home_body {
-			width: 95%;
-		}
-	}
+    .com_between {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .com_between .left {
+        width: 180px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .com_between .left .icon {
+        width: 40px;
+    }
+
+    .com_between .right {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .com_between .right .item {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .com_between .right .icon {
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        background: #ddd;
+        border-radius: 100%;
+        margin-right: 5px;
+    }
+
+    .com_between .right .l {
+        display: flex;
+        align-items: center;
+        width: 150px;
+        font-weight: 400;
+    }
+
+    .com_between .left .icon {
+        width: auto;
+        font-size: 60px;
+        color: #bbb;
+    }
+
+    /* 移动端 */
+    @media (max-width: 768px) {
+        .com_between .right {
+            margin-left: 10px;
+            overflow-x: auto;
+        }
+    }
 </style>
-<div class="com_content home_body" id="home_body" v-cloak>
-	<div class="com_title">
-		<div class="h1">应用列表</div>
-		<div class="right">
-			<button class="btn btn-main" @click="addsystem">+添加应用</button>
-		</div>
-	</div>
-	<div v-if="isLoadend && datalist.length">
-		<div class="com_block com_between mt50" v-for="item in datalist" @click="selectSystem(2,item)">
-			<div class="left">
-				<span v-if="item.type=='wx'" class="icon iconfont">&#xe65b;</span>
-				<span v-if="item.type=='web'" class="icon iconfont">&#xe6fc;</span>
-				<div class="h1 mt10">{{item.type|systemType}}</div>
-			</div>
-			<div class="right">
-				<div class="item">
-					<span class="l"><span class="icon"></span>应用名称：</span>
-					<span class="r lightcolor">{{item.system_name}}</span>
-				</div>
-				<div class="item" v-if="item.type=='web'">
-					<span class="l"><span class="icon"></span>应用链接：</span>
-					<span class="r lightcolor">{{item.system_domain}}</span>
-				</div>
-				<div class="item">
-					<span class="l"><span class="icon"></span>appId：</span>
-					<span class="r lightcolor">{{item.app_id}}</span>
-				</div>
-				<div class="item">
-					<span class="l"><span class="icon"></span>是否开启项目统计：</span>
-					<span class="r lightcolor">{{item.is_use==0?'是':'否'}}</span>
-				</div>
-				<table class="table mt20">
-					<tr class="light_color">
-						<th class="tc" v-if="item.type=='web'">页面加载阀值</th>
-						<th class="tc" v-if="item.type=='web'">JS资源阀值</th>
-						<th class="tc" v-if="item.type=='web'">CSS资源阀值</th>
-						<th class="tc" v-if="item.type=='web'">IMG资源阀值</th>
-						<th class="tc">AJAX加载阀值</th>
-						<th class="tc" v-if="item.type=='web'">是否统计页面性能</th>
-						<th class="tc">是否统计AJAX性能</th>
-						<th class="tc" v-if="item.type=='web'">是否统计页面资源性能</th>
-						<th class="tc">是否统计用户系统信息</th>
-						<th class="tc">是否统计错误信息</th>
-					</tr>
-					<tr>
-						<td class="tc" v-if="item.type=='web'">{{item.slow_page_time}}s</td>
-						<td class="tc" v-if="item.type=='web'">{{item.slow_js_time}}s</td>
-						<td class="tc" v-if="item.type=='web'">{{item.slow_css_time}}s</td>
-						<td class="tc" v-if="item.type=='web'">{{item.slow_img_time}}s</td>
-						<td class="tc">{{item.slow_ajax_time}}s</td>
-						<td class="tc" v-if="item.type=='web'">{{item.is_statisi_pages==0?'是':'否'}}</td>
-						<td class="tc">{{item.is_statisi_ajax==0?'是':'否'}}</td>
-						<td class="tc" v-if="item.type=='web'">{{item.is_statisi_resource==0?'是':'否'}}</td>
-						<td class="tc">{{item.is_statisi_system==0?'是':'否'}}</td>
-						<td class="tc">{{item.is_statisi_error==0?'是':'否'}}</td>
-					</tr>
-				</table>
-				<div>
-					<button class="btn mt30 mr20 btn-default" @click.stop="selectSystem(1,item)">设置</button>
-					<button class="btn mt10 btn-main" @click="selectSystem(2,item)">进入</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div v-if="isLoadend && !datalist.length" class="empty mt30 tc">暂无数据！</div>
+<div class="com_content" id="home_body" v-cloak>
+    <div class="com_title">
+        <div class="h1">我的应用</div>
+        <div class="right">
+            <button class="btn btn-main" @click="apps_add">+ 添加应用</button>
+        </div>
+    </div>
+    <template v-if="isLoadend">
+        <template v-if="datalist.length > 0">
+            <div class="com_block com_between mt50" v-for="item in datalist">
+                <div class="left">
+                    <span v-if="item.type=='wx'" class="icon iconfont">&#xe65b;</span>
+                    <span v-if="item.type=='web'" class="icon iconfont">&#xe6fc;</span>
+                    <div class="h1 mt10">{{item.type|systemType}}</div>
+                </div>
+                <div class="right">
+                    <div class="item">
+                        <span class="l"><span class="icon"></span>应用名称：</span>
+                        <span class="r lightcolor">{{item.system_name}}</span>
+                    </div>
+                    <div class="item" v-if="item.type=='web'">
+                        <span class="l"><span class="icon"></span>应用链接：</span>
+                        <span class="r lightcolor"><a :href="'http://' + item.system_domain"
+                                target="_blank">{{item.system_domain}}</a></span>
+                    </div>
+                    <div class="item">
+                        <span class="l"><span class="icon"></span>appId：</span>
+                        <span class="r lightcolor">{{item.app_id}}</span>
+                    </div>
+                    <div class="item">
+                        <span class="l"><span class="icon"></span>开启统计：</span>
+                        <span class="r lightcolor">{{item.is_use==0?'是':'否'}}</span>
+                    </div>
+                    <table class="table mt20">
+                        <tr class="light_color">
+                            <th class="tc" v-if="item.type=='web'">页面加载阀值</th>
+                            <th class="tc" v-if="item.type=='web'">JS资源阀值</th>
+                            <th class="tc" v-if="item.type=='web'">CSS资源阀值</th>
+                            <th class="tc" v-if="item.type=='web'">IMG资源阀值</th>
+                            <th class="tc">AJAX加载阀值</th>
+                            <th class="tc" v-if="item.type=='web'">统计页面性能</th>
+                            <th class="tc">统计AJAX性能</th>
+                            <th class="tc" v-if="item.type=='web'">统计页面资源性能</th>
+                            <th class="tc">统计用户系统信息</th>
+                            <th class="tc">统计错误信息</th>
+                        </tr>
+                        <tr>
+                            <td class="tc" v-if="item.type=='web'">{{item.slow_page_time}}s</td>
+                            <td class="tc" v-if="item.type=='web'">{{item.slow_js_time}}s</td>
+                            <td class="tc" v-if="item.type=='web'">{{item.slow_css_time}}s</td>
+                            <td class="tc" v-if="item.type=='web'">{{item.slow_img_time}}s</td>
+                            <td class="tc">{{item.slow_ajax_time}}s</td>
+                            <td class="tc" v-if="item.type=='web'">{{item.is_statisi_pages==0?'是':'否'}}</td>
+                            <td class="tc">{{item.is_statisi_ajax==0?'是':'否'}}</td>
+                            <td class="tc" v-if="item.type=='web'">{{item.is_statisi_resource==0?'是':'否'}}</td>
+                            <td class="tc">{{item.is_statisi_system==0?'是':'否'}}</td>
+                            <td class="tc">{{item.is_statisi_error==0?'是':'否'}}</td>
+                        </tr>
+                    </table>
+                    <div>
+                        <button class="btn mt30 mr20 btn-default" @click="apps_config(item)">设置</button>
+                        <button class="btn mt10 btn-main" @click="app_view(item)">进入</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <div v-else class="empty mt30 tc">暂无数据！</div>
+    </template>
 </div>
 <script>
-	new Vue({
-		el: '#home_body',
-		data: function () {
-			return {
-				token:'',
-				datalist:[],
-				userMsg:{},
-				isLoadend:false,
-			}
-		},
-		filters: {
-			systemType: window.Filter.systemType,
-		},
-		mounted() {
-			const userMsg = util.getStorage('local', 'userMsg');
-			this.userMsg = userMsg ? JSON.parse(userMsg) : {};
-			this.token = this.userMsg.token;
-			this.getMsgForUserId();
-		},
-		methods: {
-			getMsgForUserId() {
-				util.ajax({
-					type:'get',
-					url: config.baseApi + 'api/v1/system/getSysForUserId?token=' + this.token,
-					success:  (data) => {
-						this.isLoadend = true;
-						if(data.data && data.data.length){
-							this.datalist = data.data;
-						}
-					}
-				})
-			},
-			addsystem() {
-				location.href = `/selectype`
-			},
-			selectSystem(type,item){
-				if(type===1 && item.type==='web'){
-					location.href = '/web/setting';	
-				}else if(type === 2 && item.type === 'web'){
-					location.href = '/web/home';	
-				}else if(type === 1 && item.type === 'wx'){
-					location.href = '/wx/setting';	
-				}else if (type === 2 && item.type === 'wx') {
-					location.href = '/wx/home';	
-				}	
-				util.setStorage('local','appId',item.app_id)
-			}
-		},
-	})
+    'use strict';
+    new Vue({
+        el: '#home_body',
+        data() {
+            return {
+                token: '',
+                datalist: [],
+                userMsg: {},
+                isLoadend: false
+            };
+        },
+        filters: {
+            systemType: window.Filter.systemType,
+        },
+        mounted() {
+            const userMsg = util.getStorage('local', 'userMsg');
+            this.userMsg = userMsg ? JSON.parse(userMsg) : {};
+            this.token = this.userMsg.token;
+            this.get_apps();
+        },
+        methods: {
+            get_apps() {
+                util.ajax({
+                    type: 'get',
+                    url: config.baseApi + 'api/v1/system/getSysForUserId?token=' + this.token,
+                    success: (data) => {
+                        this.isLoadend = true;
+                        if (data.data && data.data.length) {
+                            this.datalist = data.data;
+                        }
+                    }
+                });
+            },
+            apps_add() {
+                window.location.href = '/apps/select';
+            },
+            apps_config(item) {
+                // 打开设置
+                util.setStorage('local', 'appId', item.app_id);
+                if (item.type === 'web') {
+                    window.location.href = '/web/setting';
+                } else if (item.type === 'wx') {
+                    window.location.href = '/wx/setting';
+                }
+            },
+            app_view(item) {
+                // 查看数据
+                util.setStorage('local', 'appId', item.app_id);
+                if (item.type === 'web') {
+                    window.location.href = '/web/home';
+                } else if (item.type === 'wx') {
+                    window.location.href = '/wx/home';
+                }
+            }
+        },
+    });
 </script>

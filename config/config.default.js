@@ -4,26 +4,18 @@ const address = require('address');
 
 module.exports = () => {
     const config = (exports = {});
-
     config.name = '性能监控系统';
-
-    config.description = '性能监控系统';
-
+    config.description = '前端性能监控系统';
     config.keys = 'node_performance_keys';
-
     config.debug = true;
-
     config.session_secret = 'node_performance_secret';
-
     config.middleware = [];
 
     // 线上环境此处替换为项目根域名 例如:webms.crogram.org (这里不需要填写http|https和斜杠等字符)
     // 用于安全校验和回调域名根路径 开发路径域名
     // 对外客户端访问的域名或者IP地址
-    config.host = '127.0.0.1';
-
+    config.host = 'localhost';
     config.port = 7001;
-
     config.origin = `http://${config.host}:${config.port}`;
 
     // 集群配置（一般默认即可），服务端内部
@@ -163,14 +155,14 @@ module.exports = () => {
     // 分页条数
     config.pageSize = 50;
 
-    // github login
+    // 第三方登录：GitHub，配置client_id时登陆界面会展示
     config.github = {
-        client_id: 'xxxxxx', // github的 Client Id
-        client_secret: 'xxxxxx', // github的 Client Secret
+        client_id: '', // github的 Client Id
+        client_secret: '', // github的 Client Secret
         scope: ['user'] // 表示只获取用户信息
     };
 
-    // ldap
+    // 第三方登录：LDAP
     config.ldap = {
         isuse: false, // 是否采用ldap;
         server: 'ldap://xxx', // ldap服务器地址
@@ -178,17 +170,17 @@ module.exports = () => {
         dc: 'xx' // dc, 非com的另外一层的dc，例如 dc=foobar,dc=com, 这里填 foobar
     };
 
-    // 新浪微博 login
+    // 第三方登录：新浪微博
     config.weibo = {
-        client_id: 'xxxxxx', // 微博的App Key
-        client_secret: 'xxxxxx', // 微博的App Secret
+        client_id: '', // 微博的App Key
+        client_secret: '', // 微博的App Secret
         scope: ['all']
     };
 
-    // wechat login
+    // 第三方登录：微信
     config.wechat = {
         client_id: 'xxxxxx', // 微信的AppId
-        client_secret: 'xxxxxx' // 微信的App Secret
+        client_secret: '' // 微信的App Secret
     };
 
     // 从 `Node.js 性能平台` 获取对应的接入参数 https://node.console.aliyun.com
@@ -204,7 +196,7 @@ module.exports = () => {
             // service: '163',
             host: 'smtp.exmail.qq.com',
             port: 465,
-            secure: true,
+            secure: false,
             auth: {
                 user: 'xxxxxx',
                 pass: 'xxxxxx'

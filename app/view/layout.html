@@ -2,10 +2,10 @@
 <html>
     <head>
         <!-- meta -->
-        <title><%= data.title %></title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="https://pm.seosiwei.com/images/common/favicon.ico" type="image/x-icon">
+        <title><%= data.title %></title>
+        <link rel="icon" href="/public/img/favicon.ico" type="image/x-icon">
         <!-- css -->
         <link rel="stylesheet" type="text/css" href="/public/css/base.css">
         <link rel="stylesheet" type="text/css" href="/public/lib/popup/popup.css">
@@ -22,15 +22,27 @@
         <script src="/public/lib/calendar/zane-calendar.min.js"></script>
         <script src="/public/js/vue-filters.js"></script>
         <script src="/public/js/vue-components.js"></script>
+        <script src="/public/js/web-report-default.min.js"></script>
+        <script>
+            Performance({
+                domain: 'http://localhost:7001/api/v1/report/web',
+                add: {
+                    appId: 'jXdEaTB1606209390234'
+                }
+            });
+        </script>
     </head>
     <body>
         <div id="loading"></div>
-        <div id='main'>
+        <div id="main">
             <% include ./header.html %>
-            <%- body %>
+            <div class="main-body">
+                <%- body %>
+            </div>
             <% include ./footer.html %>
         </div>
-        <div id="footer">Copyright zane © 2018-2019 <a target="_blank" href="https://github.com/wangweianger">github
-                address</a></div>
+        <div id="footer">
+            Copyright &copy; 2018-2020 前端性能监控平台
+        </div>
     </body>
 </html>
