@@ -32,6 +32,20 @@ class EmailsController extends Controller {
         });
     }
 
+    async sendTestEmail() {
+        const { ctx } = this;
+        const query = ctx.request.body;
+        const to = query.to;
+
+        if (!to) throw new Error('发送测试邮件：收件人不能为空!');
+
+        const result = await ctx.service.emails.sendTestEmail(to);
+
+        ctx.body = this.app.result({
+            data: result
+        });
+    }
+
     async deleteEmail() {
         const { ctx } = this;
         const query = ctx.request.body;

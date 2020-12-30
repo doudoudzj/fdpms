@@ -64,6 +64,8 @@ module.exports = (app) => {
     apiV1Router.get('emails/list', tokenRequired, emails.getList);
 
     apiV1Router.post('emails/add', tokenRequired, emails.addEmail);
+    // 发送测试邮件
+    apiV1Router.post('emails/test', tokenRequired, emails.sendTestEmail);
 
     apiV1Router.post('emails/delete', tokenRequired, emails.deleteEmail);
 };
