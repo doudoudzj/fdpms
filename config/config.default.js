@@ -11,7 +11,7 @@ module.exports = () => {
     config.session_secret = 'node_performance_secret';
     config.middleware = [];
 
-    // 线上环境此处替换为项目根域名 例如:webms.crogram.org (这里不需要填写http|https和斜杠等字符)
+    // 线上环境此处替换为项目根域名 例如:fdms.domain.com (这里不需要填写http|https和斜杠等字符)
     // 用于安全校验和回调域名根路径 开发路径域名
     // 对外客户端访问的域名或者IP地址
     config.host = 'localhost';
