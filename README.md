@@ -125,11 +125,11 @@ https://github.com/wangweianger/wx-report-sdk
 3. docker-compose 启动方式
 > 方式一：
 ```sh
-# 项目所在目录
+# 项目所在目录
 ./start-docker-compose.sh
 ```
 
-> 方式二
+> 方式二
 ```sh
 export hostIP='自己的外网IP' && docker-compose up -d --build
 ```
