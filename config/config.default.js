@@ -12,7 +12,7 @@ module.exports = () => {
     config.middleware = [];
 
     // 线上环境此处替换为项目根域名 例如:fdms.domain.com (这里不需要填写http|https和斜杠等字符)
-    // 用于安全校验和回调域名根路径 开发路径域名
+    // 用于安全校验和回调域名根路径 开发路径域名（必填）
     // 对外客户端访问的域名或者IP地址
     config.host = 'localhost';
     config.port = 7001;
@@ -193,13 +193,12 @@ module.exports = () => {
     // send email config
     config.email = {
         client: {
-            // service: '163',
             host: 'smtp.exmail.qq.com',
             port: 465,
             secure: false,
             auth: {
-                user: 'xxxxxx',
-                pass: 'xxxxxx'
+                user: '',
+                pass: ''
             }
         }
     };
@@ -220,7 +219,7 @@ module.exports = () => {
         dir: path.resolve(__dirname, '../buildlogs')
     };
 
-    // redis配置
+    // 必需服务 redis配置
     config.redis = {
         client: {
             port: 6379, // Redis port
@@ -230,7 +229,7 @@ module.exports = () => {
         }
     };
 
-    // mongodb 服务
+    // 必需服务 mongodb 服务
     const dbclients = {
         db3: {
             // 单机部署

@@ -1,51 +1,19 @@
 'use strict';
 
 module.exports = () => {
+    // 正式环境配置文件
+    // 所配置参数值会覆盖 'config.prod.js' 默认配置项值
     const config = (exports = {});
 
     config.debug = false;
-
-    // 用于安全校验和回调域名根路径 开发路径域名（必填）
-    // 线上环境此处替换为项目根域名 例如:https://blog.seosiwei.com (这里需要填写http|https和斜杠等字符)
-    config.origin = 'https://www.xxx.com';
-
-    // 百度地图api key
-    config.BAIDUAK = 'xxxxxxxxxx';
-
-    // github login
-    config.github = {
-        client_id: 'xxxxxx',
-        client_secret: 'xxxxxx',
-        scope: ['user']
-    };
-
-    // ldap
-    config.ldap = {
-        server: 'ldap://xxx', // ldap服务器地址
-        ou: 'xx', // ou
-        dc: 'xx', // dc, 非com的另外一层的dc，例如 dc=foobar,dc=com, 这里填 foobar
-        isLdap: false // 是否采用ldap;
-    };
-
-    // 新浪微博 login
-    config.weibo = {
-        client_id: 'xxxxxx', // 微博的App Key
-        client_secret: 'xxxxxx', // 微博的App Secret
-        scope: ['all']
-    };
-
-    // wechat login
-    config.wechat = {
-        client_id: 'xxxxxx', // 微信的AppId
-        client_secret: 'xxxxxx' // 微信的App Secret
-    };
+    config.origin = 'http://localhost:7001';
 
     // redis配置
     config.redis = {
         client: {
             port: 6379, // Redis port
-            host: 'xx.xx.xx.xx', // Redis host
-            password: 'xxxxxx',
+            host: '127.0.0.1', // Redis host
+            password: '',
             db: 0
         }
     };
@@ -87,14 +55,6 @@ module.exports = () => {
     // mongoose配置
     config.mongoose = {
         clients: dbclients
-    };
-
-    config.security = {
-        domainWhiteList: ['https://xxx.xx.com'],
-        csrf: {
-            enable: false,
-            ignore: '/api/v1/report/**'
-        }
     };
 
     return config;
