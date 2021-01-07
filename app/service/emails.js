@@ -175,9 +175,10 @@ class EmailsService extends Service {
         const mailOptions = {
             from: `${this.app.config.name}<${this.app.config.email.client.auth.user}>`, // 性能监控系统<noreply@xxxx.com>
             to,
-            subject: '测试',
-            html: '测试邮件'
+            subject: '测试邮件',
+            html: '性能监控系统，测试邮件'
         };
+
         this.app.email.sendMail(mailOptions);
     }
 }

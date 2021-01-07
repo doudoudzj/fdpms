@@ -83,7 +83,7 @@
     <div class="com_title">
         <div class="h1">邮件列表</div>
         <div class="right">
-            <button class="btn btn-main" @click="showModel=true">+ 添加邮件</button>
+            <button class="btn btn-default" @click="showModel=true">+ 添加邮件</button>
         </div>
     </div>
     <div v-if="isLoadend && datalist.length">
@@ -109,8 +109,8 @@
                             </div>
                         </td>
                         <td class="tc">
-                            <button class="btn btn-default" @click="testEmail(item)">测试</button>
-                            <button class="btn btn-default" @click="deleteEmail(item)">删除</button>
+                            <button class="btn btn-primary" @click="testEmail(item)">测试</button>
+                            <button class="btn btn-primary" @click="deleteEmail(item)">删除</button>
                         </td>
                     </tr>
                 </table>
@@ -131,7 +131,7 @@
             <div class="main">
                 <div class="item"><span>邮件：</span><input type="text" v-model.trim="email" placeholder="邮件地址"></div>
                 <div class="item"><span>姓名：</span><input type="text" v-model.trim="name" placeholder="所属人"></div>
-                <button class="btn btn-main" @click="submit">确定</button>
+                <button class="btn btn-default" @click="submit">确定</button>
             </div>
         </div>
     </div>

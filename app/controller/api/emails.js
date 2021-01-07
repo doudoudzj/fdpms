@@ -39,7 +39,11 @@ class EmailsController extends Controller {
 
         if (!to) throw new Error('发送测试邮件：收件人不能为空!');
 
-        const result = await ctx.service.emails.sendTestEmail(to);
+        const result = await ctx.service.emails.sendTestEmail({
+            to
+        });
+
+        this.app.logger.info(`----------发送测试邮件----${to}------`);
 
         ctx.body = this.app.result({
             data: result
