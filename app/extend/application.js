@@ -23,7 +23,7 @@ module.exports = {
 
     /* 本地加密算法 */
     signwx(json) {
-        const wxkey = 'ZANEWANGWEI123456AGETEAMABmiliH';
+        const wxkey = 'FDPMS123456FDPMSABmiliH';
         /* 对json的key值排序 */
         const arr = [];
         const sortJson = {};

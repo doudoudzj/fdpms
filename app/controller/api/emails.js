@@ -32,6 +32,21 @@ class EmailsController extends Controller {
         });
     }
 
+    async updateEmail() {
+        const { ctx } = this;
+        const { id, email, name } = ctx.request.body;
+
+        if (!id) throw new Error('编辑邮件：邮件索引不能为空!');
+        if (!email) throw new Error('编辑邮件：邮件地址不能为空!');
+        if (!name) throw new Error('编辑邮件：邮件所属人不能为空!');
+
+        const result = await ctx.service.emails.updateEmail(id, email, name);
+
+        ctx.body = this.app.result({
+            data: result
+        });
+    }
+
     async sendTestEmail() {
         const { ctx } = this;
         const query = ctx.request.body;

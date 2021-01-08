@@ -58,6 +58,19 @@ class EmailsService extends Service {
     }
 
     /*
+     * 查询联系人
+     *
+     * @param {*} id
+     * @returns
+     * @memberof SystemService
+     */
+    async getItem(id) {
+        if (!id) throw new Error('查询邮箱：id不能为空');
+
+        return (await this.ctx.model.Email.findOne({ _id: id }).exec()) || {};
+    }
+
+    /*
      * @param {*} email
      * @param {*} name
      * @returns
@@ -72,7 +85,45 @@ class EmailsService extends Service {
     }
 
     /*
-     *
+     * 更新邮箱
+     * @param {*} id
+     * @param {*} email
+     * @param {*} name
+     * @returns
+     * @memberof EmailsService
+     */
+    async updateEmail(id, email, name) {
+        // const old = await this.getItem(id);
+        // console.log('旧', old);
+        // if (!old || !old.email) {
+        //     return {};
+        // }
+        const data = {
+            $set: {
+                email,
+                name
+            }
+        };
+        // 更新信息
+        // const result = await this.ctx.model.Email.updateOne({ _id: id }, data).exec();
+        const result = await this.ctx.model.Email.findOneAndUpdate({ _id: id }, data).exec();
+        // console.log('旧信息', result);
+
+        // 更新应用关联信息
+        if (result.email !== email && result.system_ids && result.system_ids.length > 0) {
+            // console.log('改邮箱地址', result.email, email);
+            await this.ctx.service.system.updateDaliyEmail(result.system_ids, result.email, email);
+        }
+
+        return {
+            email,
+            name,
+            old: result
+        };
+    }
+
+    /*
+     * 删除邮箱
      * @param {*} id
      * @param {*} systemIds
      * @param {*} email
@@ -108,10 +159,10 @@ class EmailsService extends Service {
         let str = '';
         let type = '';
         if (handleitem === 1) {
-            str = '每日发送日报权限';
+            str = '日报邮件通知';
             type = 'daliy';
         } else if (handleitem === 2) {
-            str = '超过历史流量峰值邮件触达';
+            str = '超过历史流量峰值邮件通知';
             type = 'highest';
         }
         const handleData = handletype === 1 ? { $push: { system_ids: { $each: [{ system_id: appId, desc: str, type }] } } } : { $pull: { system_ids: { system_id: appId, type } } };

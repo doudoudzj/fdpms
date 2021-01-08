@@ -1,23 +1,4 @@
 <style scoped>
-    .table .user {
-        display: inline-block;
-        padding: 5px 8px;
-        background: #f5f5f5;
-        border: solid 1px #ddd;
-        border-radius: 20px;
-        font-size: 14px;
-        color: #333;
-        cursor: pointer;
-        font-weight: bold;
-        margin: 0 10px 10px 0;
-    }
-
-    .table .user .iconfont {
-        color: #aaa;
-        font-size: 20px;
-        margin-left: 5px;
-    }
-
     .com_model .content {
         width: 450px;
         height: 280px;
@@ -65,7 +46,7 @@
         cursor: pointer;
     }
 
-    .table .author {
+    .related-apps {
         font-size: 12px;
         border-bottom: solid 1px #ddd;
         padding-bottom: 10px;
@@ -73,7 +54,7 @@
         color: #8776f7;
     }
 
-    .table .author:last-child {
+    .related-apps:last-child {
         border-bottom: none;
         padding-bottom: 0px;
         margin-bottom: 0px;
@@ -81,57 +62,58 @@
 </style>
 <div class="com_content" id="home_body" v-cloak>
     <div class="com_title">
-        <div class="h1">邮件列表</div>
+        <div class="h1">联系人管理</div>
         <div class="right">
-            <button class="btn btn-default" @click="showModel=true">+ 添加邮件</button>
+            <button class="btn btn-default" @click="editEmail">+ 添加</button>
         </div>
     </div>
-    <div v-if="isLoadend && datalist.length">
-        <div class="com_block mt20">
-            <h1 class="com_h2 mb20">邮件列表信息</h1>
-            <div class="overflow_table">
-                <table class="table">
-                    <tr class="light_color">
-                        <th class="tc w-200">邮件</th>
-                        <th class="tc w-100">中文名</th>
-                        <th class="tc w-200">权限</th>
-                        <th class="tc w-200">操作</th>
-                    </tr>
-                    <tr v-for="item in datalist">
-                        <td class="tc"><strong>{{item.email}}</strong></td>
-                        <td class="tc">{{item.name}}</td>
-                        <td class="tl">
-                            <div class="author" v-if="item.system_ids&&item.system_ids.length"
-                                v-for="items in item.system_ids">
-                                <div>{{items.desc}}</div>
-                                <div>应用名称：{{items.system_name}}</div>
-                                <div>系统ID：{{items.system_id}}</div>
-                            </div>
-                        </td>
-                        <td class="tc">
-                            <button class="btn btn-primary" @click="testEmail(item)">测试</button>
-                            <button class="btn btn-primary" @click="deleteEmail(item)">删除</button>
-                        </td>
-                    </tr>
-                </table>
+    <div class="panel panel-default">
+        <div class="panel-heading">联系人列表</div>
+        <table class="table table-bordered table-responsive" v-if="isLoadend && datalist.length">
+            <tr>
+                <th>邮箱</th>
+                <th>姓名</th>
+                <th>关联应用</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="item in datalist">
+                <td>{{item.email}}</td>
+                <td>{{item.name}}</td>
+                <td>
+                    <template v-if="item.system_ids&&item.system_ids.length">
+                        <div class="related-apps" v-for="items in item.system_ids">
+                            <div>{{items.desc}}</div>
+                            <div>应用：{{items.system_name}}</div>
+                            <div>AppID：{{items.system_id}}</div>
+                        </div>
+                    </template>
+                    <template v-else>无</template>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @click="editEmail(item)">编辑</button>
+                    <button class="btn btn-success" @click="testEmail(item)">测试</button>
+                    <button class="btn btn-danger" @click="deleteEmail(item)">删除</button>
+                </td>
+            </tr>
+        </table>
+        <div class="panel-body">
+            <!--  分页 -->
+            <div class="common_page_style text-center">
+                <div id="copot-page" class="copot-page"></div>
             </div>
-        </div>
-        <!--  分页 -->
-        <div class="tc common_page_style mt10">
-            <div id="copot-page" class="copot-page"></div>
+            <div v-if="isLoadend && !datalist.length" class="mt30 alert alert-info text-center">暂无邮件！</div>
         </div>
     </div>
 
-    <div v-if="isLoadend && !datalist.length" class="empty mt30 tc">暂无邮件！</div>
     <!-- 弹出model -->
     <div class="com_model" v-show="showModel">
         <div class="mask" @click="showModel=false"></div>
         <div class="content">
-            <h1 class="com_h2 mt20 ml20">新增邮件 <span class="iconfont fr" @click="showModel=false">&#xe674;</span></h1>
+            <h1 class="com_h2 mt20 ml20">{{ this.id ? '编辑联系人' : '新增邮件' }} <span class="iconfont fr" @click="showModel=false">&#xe674;</span></h1>
             <div class="main">
                 <div class="item"><span>邮件：</span><input type="text" v-model.trim="email" placeholder="邮件地址"></div>
                 <div class="item"><span>姓名：</span><input type="text" v-model.trim="name" placeholder="所属人"></div>
-                <button class="btn btn-default" @click="submit">确定</button>
+                <button class="btn btn-default block" @click="submit">确定</button>
             </div>
         </div>
     </div>
@@ -151,11 +133,12 @@
                 userMsg: {},
                 isLoadend: false,
                 email: '',
-                name: ''
+                name: '',
+                id: ''
             };
         },
         filters: {
-            systemType: window.Filter.systemType,
+            systemType: window.Filter.systemType
         },
         mounted() {
             const userMsg = util.getStorage('local', 'userMsg');
@@ -170,7 +153,7 @@
                     url: config.baseApi + 'api/v1/emails/list',
                     data: {
                         pageNo: this.pageNo,
-                        pageSize: this.pageSize,
+                        pageSize: this.pageSize
                     },
                     success: (data) => {
                         this.isLoadend = true;
@@ -178,7 +161,7 @@
                             this.datalist = [];
                             return;
                         }
-                        this.datalist = data.data.datalist
+                        this.datalist = data.data.datalist;
                         new Page({
                             parent: $('#copot-page'),
                             nowPage: this.pageNo,
@@ -190,12 +173,25 @@
                             }
                         });
                     }
-                })
+                });
+            },
+            editEmail(item) {
+                // 添加/编辑
+                this.showModel = true;
+                if (item && item._id && item.name && item.email) {
+                    this.id = item._id;
+                    this.email = item.email;
+                    this.name = item.name;
+                    return;
+                }
+                this.id = '';
+                this.email = '';
+                this.name = '';
             },
             submit() {
                 if (!util.regCombination('e').test(this.email)) {
                     popup.miss({
-                        title: '请填写邮件地址!'
+                        title: '邮件地址格式有误!'
                     });
                     return false;
                 }
@@ -205,13 +201,19 @@
                     });
                     return false;
                 }
+                const params = {
+                    email: this.email,
+                    name: this.name
+                };
+                let operate = 'api/v1/emails/add';
+                if (this.id) {
+                    params.id = this.id;
+                    operate = 'api/v1/emails/update';
+                }
                 util.ajax({
-                    url: config.baseApi + 'api/v1/emails/add',
-                    data: {
-                        email: this.email,
-                        name: this.name
-                    },
-                    success: (data) => {
+                    url: config.baseApi + operate,
+                    data: params,
+                    success: () => {
                         this.showModel = false;
                         this.getEmailsList();
                         this.email = '';
@@ -229,9 +231,9 @@
                         util.ajax({
                             url: `${config.baseApi}api/v1/emails/test`,
                             data: {
-                                to: item.email,
+                                to: item.email
                             },
-                            success: data => {
+                            success: () => {
                                 popup.miss({
                                     title: '已发送!'
                                 });
@@ -255,23 +257,23 @@
                             data: {
                                 id: item._id,
                                 systemIds: item.system_ids,
-                                email: item.email,
+                                email: item.email
                             },
-                            success: data => {
+                            success: () => {
                                 _this.getEmailsList();
                                 popup.miss({
                                     title: '操作成功!'
-                                })
+                                });
                             }
-                        })
+                        });
                     },
                     no: () => {
                         popup.miss({
                             title: '操作取消!'
-                        })
+                        });
                     }
-                })
+                });
             }
         }
-    })
+    });
 </script>

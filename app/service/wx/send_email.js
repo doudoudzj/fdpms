@@ -36,7 +36,7 @@ class SendEmailService extends Service {
         const from = systemMsg.system_name + '应用日报';
         const to = systemMsg.daliy_list.toString();
         const timestrap = new Date().getTime() - 86300000;
-        const day = this.app.format(new Date(timestrap), 'yyyy/MM/dd') + '日日报';
+        const day = this.app.config.name + '-日报通知' + this.app.format(new Date(timestrap), 'yyyy/MM/dd');
 
         datas.systemMsg = systemMsg;
         datas.day = day;

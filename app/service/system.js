@@ -224,10 +224,10 @@ class SystemService extends Service {
 
     /*
      * 新增 | 删除 日报邮件
-     * item: 1:日报邮件发送  2：流量峰值邮件发送
+     * item: 1: 日报邮件发送, 2：流量峰值邮件发送
      * @param {*} appId
      * @param {*} email
-     * @param {*} type
+     * @param {*} type 1: 新增, 2: 移除
      * @param {boolean} [handleEmali=true]
      * @param {number} [item=1]
      * @return
@@ -251,6 +251,36 @@ class SystemService extends Service {
         if (handleEmali) this.updateEmailSystemIds(email, appId, type, item);
 
         return result;
+    }
+
+    /*
+     * 更新 日报邮件
+     * item: 1: 日报邮件发送, 2：流量峰值邮件发送
+     * @param {Array} apps
+     * @param {String} old_email
+     * @param {String} new_email
+     * @return
+     * @memberof SystemService
+     */
+    async updateDaliyEmail(apps, old_email, new_email) {
+        if (old_email === new_email) {
+            return;
+        }
+        if (apps && apps.length > 0) {
+            // 移除旧的email地址,添加新的email地址
+            apps.forEach(async (item) => {
+                if (item.system_id && item.type === 'daliy') {
+                    await this.ctx.model.System.update({ app_id: item.system_id }, { $pull: { daliy_list: old_email } }, { multi: true }).exec();
+                    await this.ctx.model.System.update({ app_id: item.system_id }, { $addToSet: { daliy_list: new_email } }, { multi: true }).exec();
+                } else if (item.system_id && item.type === 'highest') {
+                    await this.ctx.model.System.update({ app_id: item.system_id }, { $pull: { highest_list: old_email } }, { multi: true }).exec();
+                    await this.ctx.model.System.update({ app_id: item.system_id }, { $addToSet: { highest_list: new_email } }, { multi: true }).exec();
+                }
+
+                // 更新redis缓存
+                this.updateSystemCache(item.system_id);
+            });
+        }
     }
 
     /*
