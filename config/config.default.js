@@ -4,14 +4,14 @@ const address = require('address');
 
 module.exports = () => {
     const config = (exports = {});
-    config.name = '性能监控系统';
+    config.name = '前端性能监控系统';
     config.description = '前端性能监控系统';
-    config.keys = 'node_performance_keys';
+    config.keys = 'node_fdpms_keys';
     config.debug = true;
-    config.session_secret = 'node_performance_secret';
+    config.session_secret = 'node_fdpms_secret';
     config.middleware = [];
 
-    // 线上环境此处替换为项目根域名 例如:fdms.domain.com (这里不需要填写http|https和斜杠等字符)
+    // 线上环境此处替换为项目根域名 例如:fdpms.domain.com (这里不需要填写http|https和斜杠等字符)
     // 用于安全校验和回调域名根路径 开发路径域名（必填）
     // 对外客户端访问的域名或者IP地址
     config.host = 'localhost';
@@ -28,7 +28,7 @@ module.exports = () => {
     };
 
     // 用户密码加盐随机值
-    config.user_pwd_salt_addition = 'ZANEHELLOBEAUTIFUL';
+    config.user_pwd_salt_addition = 'FD-PERFORMANCE-MONITORING-SYSTEM';
 
     // 用户登录态持续时间 1 天
     config.user_login_timeout = 86400;
@@ -76,13 +76,13 @@ module.exports = () => {
         },
         producer: {
             web: {
-                topic: 'zane_perfor_web',
+                topic: 'fdpms_perfor_web',
                 partition: 0, // default 0
                 attributes: 0 // default: 0
                 // timestamp: Date.now(),
             },
             wx: {
-                topic: 'zane_perfor_wx',
+                topic: 'fdpms_perfor_wx',
                 partition: 0, // default 0
                 attributes: 0 // default: 0
             }
@@ -91,12 +91,12 @@ module.exports = () => {
         // 优先选择consumer消费，两种消费配置任留一种即可
         consumer: {
             web: {
-                topic: 'zane_perfor_web',
+                topic: 'fdpms_perfor_web',
                 offset: 0, // default 0
                 partition: 0 // default 0
             },
             wx: {
-                topic: 'zane_perfor_wx',
+                topic: 'fdpms_perfor_wx',
                 offset: 0, // default 0
                 partition: 0 // default 0
             }
@@ -104,12 +104,12 @@ module.exports = () => {
         consumerGroup: {
             web: {
                 // ConsumerGroup(options, topics)
-                topic: 'zane_perfor_web',
+                topic: 'fdpms_perfor_web',
                 groupId: 'WebPerformanceGroup',
                 commitOffsetsOnFirstJoin: true
             },
             wx: {
-                topic: 'zane_perfor_wx',
+                topic: 'fdpms_perfor_wx',
                 groupId: 'WxPerformanceGroup',
                 commitOffsetsOnFirstJoin: true
             }
@@ -195,7 +195,7 @@ module.exports = () => {
         client: {
             host: 'smtp.exmail.qq.com',
             port: 465,
-            secure: false,
+            secure: true,
             auth: {
                 user: '',
                 pass: ''
