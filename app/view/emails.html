@@ -62,23 +62,27 @@
 </style>
 <div class="com_content" id="home_body" v-cloak>
     <div class="com_title">
-        <div class="h1">联系人管理</div>
+        <div class="h1"><%= data.title %></div>
         <div class="right">
-            <button class="btn btn-default" @click="editEmail">+ 添加</button>
+            <button class="btn btn-default" @click="editEmail">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+            </button>
         </div>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">联系人列表</div>
         <table class="table table-bordered table-responsive" v-if="isLoadend && datalist.length">
             <tr>
-                <th>邮箱</th>
                 <th>姓名</th>
+                <th>手机</th>
+                <th>邮箱</th>
                 <th>关联应用</th>
                 <th>操作</th>
             </tr>
             <tr v-for="item in datalist">
-                <td>{{item.email}}</td>
                 <td>{{item.name}}</td>
+                <td>未支持</td>
+                <td>{{item.email}}</td>
                 <td>
                     <template v-if="item.system_ids&&item.system_ids.length">
                         <div class="related-apps" v-for="items in item.system_ids">

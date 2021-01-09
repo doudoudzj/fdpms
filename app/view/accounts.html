@@ -1,0 +1,184 @@
+<div class="com_content" id="home_body" v-if="userMsg.level==0" v-cloak>
+    <div class="com_title">
+        <div class="h1"><%= data.title %></div>
+        <div class="right">
+            <button class="btn btn-default" @click="add_account">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+            </button>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">账号列表</div>
+        <table class="table table-bordered table-responsive" v-if="isLoadend && datalist.length">
+            <tr>
+                <th>账号</th>
+                <th>角色</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="item in datalist">
+                <td>{{item.user_name}}</td>
+                <td>{{ item.level == 0 ? '管理员' : '普通用户' }}</td>
+                <td>{{ item.is_use == 0 ? '正常' : '已禁用' }}</td>
+                <td>{{ item.create_time | date('/', true) }}</td>
+                <td>
+                    <button class="btn btn-success" @click="edit_account(item)">编辑</button>
+                    <button class="btn btn-info" v-if="item.is_use==1" @click="setIsUse(item)">启用</button>
+                    <button class="btn btn-warning" v-else @click="setIsUse(item)">禁用</button>
+                    <button class="btn btn-danger" @click="delete_account(item)">删除</button>
+                </td>
+            </tr>
+        </table>
+        <div class="panel-body">
+            <div v-if="isLoadend && !datalist.length" class="alert alert-info text-center">暂无用户！</div>
+            <!-- 分页 -->
+            <div class="text-center common_page_style">
+                <div id="copot-page" class="copot-page"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    'use strict';
+    new Vue({
+        el: '#home_body',
+        data() {
+            return {
+                datalist: [],
+                isLoadend: false,
+                pageNo: 1,
+                pageSize: 6,
+                totalNum: 0,
+                username: '',
+                userMsg: {}
+            };
+        },
+        filters: {
+            date: window.Filter.date
+        },
+        mounted() {
+            const userMsg = util.getStorage('local', 'userMsg');
+            this.userMsg = userMsg ? JSON.parse(userMsg) : {};
+
+            // 非管理员禁止查看此页面
+            if (this.userMsg.level !== 0) {
+                popup.confirm({
+                    title: '你无权限访问此页面，请返回', yes: () => {
+                        window.history.back();
+                    }, no: () => {
+                        window.history.back();
+                    }
+                });
+                return;
+            }
+            this.getUserList();
+        },
+        methods: {
+            add_account() {
+                console.log('添加账号');
+                popup.miss({
+                    title: '未实现!'
+                });
+            },
+            edit_account(item) {
+                console.log('编辑账号', item);
+                popup.miss({
+                    title: '未实现!'
+                });
+            },
+            getUserList() {
+                this.isLoadend = false;
+                util.ajax({
+                    url: `${config.baseApi}api/v1/accounts/list`,
+                    data: {
+                        pageNo: this.pageNo,
+                        pageSize: this.pageSize,
+                        userName: this.username
+                    },
+                    success: data => {
+                        this.isLoadend = true;
+                        if (!data.data.datalist && !data.data.datalist.length) {
+                            this.datalist = [];
+                            return;
+                        }
+                        this.datalist = data.data.datalist;
+                        new Page({
+                            parent: $('#copot-page'),
+                            nowPage: this.pageNo,
+                            pageSize: this.pageSize,
+                            totalCount: data.data.totalNum,
+                            callback: (nowPage, totalPage) => {
+                                this.pageNo = nowPage;
+                                this.getUserList();
+                            }
+                        });
+                    }
+                });
+            },
+            searchUserList() {
+                this.pageNo = 1;
+                this.isLoadend = false;
+                this.getUserList();
+            },
+            setIsUse(item) {
+                if (this.userMsg.user_name === item.user_name) {
+                    popup.miss({
+                        title: '禁止禁用自己!'
+                    });
+                    return;
+                }
+                const _this = this;
+                popup.confirm({
+                    title: `确定${item.is_use === 0 ? '禁用' : '启用'}此用户？`,
+                    yes() {
+                        util.ajax({
+                            url: `${config.baseApi}api/v1/accounts/setIsUse`,
+                            data: {
+                                id: item._id,
+                                usertoken: item.usertoken,
+                                isUse: item.is_use == 0 ? 1 : 0
+                            },
+                            success: () => {
+                                _this.getUserList();
+                                popup.miss({
+                                    title: '操作成功!'
+                                });
+                            }
+                        });
+                    },
+                    no: () => {}
+                });
+            },
+            delete_account(item) {
+                if (this.userMsg.user_name === item.user_name) {
+                    popup.miss({
+                        title: '禁止删除自己!'
+                    });
+                    return;
+                }
+                const _this = this;
+                popup.confirm({
+                    title: '确定删除此用户吗？',
+                    yes() {
+                        util.ajax({
+                            url: `${config.baseApi}api/v1/accounts/delete`,
+                            data: {
+                                id: item._id,
+                                usertoken: item.usertoken
+                            },
+                            success: () => {
+                                _this.getUserList();
+                                popup.miss({
+                                    title: '操作成功!'
+                                });
+                            }
+                        });
+                    },
+                    no() {}
+                });
+            }
+        }
+    });
+</script>

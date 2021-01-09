@@ -25,7 +25,7 @@ module.exports = () => {
             };
             return;
         }
-        const data = await ctx.service.user.finUserForToken(usertoken);
+        const data = await ctx.service.accounts.finUserForToken(usertoken);
         if (!data || !data.user_name) {
             ctx.cookies.set('usertoken', '');
             const descr = data && !data.user_name ? data.desc : '登录用户无效,请重新登录！';

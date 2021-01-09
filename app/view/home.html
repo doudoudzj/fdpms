@@ -62,7 +62,9 @@
     <div class="com_title">
         <div class="h1">我的应用</div>
         <div class="right">
-            <button class="btn btn-main" @click="apps_add">+ 添加应用</button>
+            <button class="btn btn-default" @click="apps_add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+            </button>
         </div>
     </div>
     <template v-if="isLoadend">
@@ -71,7 +73,7 @@
                 <div class="left">
                     <span v-if="item.type=='wx'" class="icon iconfont">&#xe65b;</span>
                     <span v-if="item.type=='web'" class="icon iconfont">&#xe6fc;</span>
-                    <div class="h1 mt10">{{item.type|systemType}}</div>
+                    <div class="mt10">{{item.type|systemType}}</div>
                 </div>
                 <div class="right">
                     <div class="item">
@@ -91,7 +93,7 @@
                         <span class="l"><span class="icon"></span>开启统计：</span>
                         <span class="r lightcolor">{{item.is_use==0?'是':'否'}}</span>
                     </div>
-                    <table class="table mt20">
+                    <table class="table table-bordered table-responsive mt20">
                         <tr class="light_color">
                             <th class="tc" v-if="item.type=='web'">页面加载阀值</th>
                             <th class="tc" v-if="item.type=='web'">JS资源阀值</th>
@@ -118,8 +120,8 @@
                         </tr>
                     </table>
                     <div>
-                        <button class="btn mt30 mr20 btn-default" @click="apps_config(item)">设置</button>
-                        <button class="btn mt10 btn-main" @click="app_view(item)">进入</button>
+                        <button class="btn btn-primary" @click="apps_config(item)">设置</button>
+                        <button class="btn btn-default" @click="app_view(item)">进入</button>
                     </div>
                 </div>
             </div>
@@ -140,16 +142,16 @@
             };
         },
         filters: {
-            systemType: window.Filter.systemType,
+            systemType: window.Filter.systemType
         },
         mounted() {
             const userMsg = util.getStorage('local', 'userMsg');
             this.userMsg = userMsg ? JSON.parse(userMsg) : {};
             this.token = this.userMsg.token;
-            this.get_apps();
+            this.init();
         },
         methods: {
-            get_apps() {
+            init() {
                 util.ajax({
                     type: 'get',
                     url: config.baseApi + 'api/v1/system/getSysForUserId?token=' + this.token,
@@ -162,7 +164,7 @@
                 });
             },
             apps_add() {
-                window.location.href = '/apps/select';
+                window.location.href = '/apps/add';
             },
             apps_config(item) {
                 // 打开设置
@@ -182,6 +184,6 @@
                     window.location.href = '/wx/home';
                 }
             }
-        },
+        }
     });
 </script>

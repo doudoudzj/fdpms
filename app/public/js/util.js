@@ -83,25 +83,25 @@ class utilfn {
 
         return $.ajax({
             type: json.type || 'post',
-            url: url,
+            url,
             data: json.data || '',
             dataType: 'json',
             async: asyncVal,
-            beforeSend: function (xhr) {
+            beforeSend: (xhr) => {
                 json.beforeSend && json.beforeSend(xhr);
             },
-            success: function (data) {
+            success: (data) => {
                 if (!json.nohideloading) {
                     This.hideLoading();
                 }
                 clearTimeout(timeout);
-                if (typeof data == 'string') {
+                if (typeof data === 'string') {
                     This.error(JSON.parse(data), json);
                 } else {
                     This.error(data, json);
                 }
             },
-            complete: function (XMLHttpRequest) {
+            complete: (XMLHttpRequest) => {
                 if (!json.nohideloading) {
                     This.hideLoading();
                 }
@@ -110,7 +110,7 @@ class utilfn {
                     json.complete(XMLHttpRequest);
                 }
             },
-            error: function (XMLHttpRequest) {
+            error: (XMLHttpRequest) => {
                 This.hideLoading();
                 clearTimeout(timeout);
                 if (noError) {
@@ -120,9 +120,9 @@ class utilfn {
         });
     }
 
-    //error 处理函数
+    // error 处理函数
     error(data, json) {
-        //判断code 并处理
+        // 判断code 并处理
         var dataCode = parseInt(data.code);
         if (!json.isGoingLogin && dataCode == 1004) {
             // 判断app或者web
@@ -155,10 +155,10 @@ class utilfn {
                     break;
                 default:
                     if (json.goingError) {
-                        //走error回调
+                        // 走error回调
                         json.error && json.error(data);
                     } else {
-                        //直接弹出错误信息
+                        // 直接弹出错误信息
                         popup.alert({
                             type: 'msg',
                             title: data.desc

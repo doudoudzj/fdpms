@@ -13,7 +13,7 @@ class UserController extends Controller {
         if (!userName) throw new Error('用户登录：userName不能为空');
         if (!passWord) throw new Error('用户登录：passWord不能为空');
 
-        const result = await ctx.service.user.login(userName, passWord);
+        const result = await ctx.service.accounts.login(userName, passWord);
 
         ctx.body = this.app.result({
             data: result
@@ -30,7 +30,7 @@ class UserController extends Controller {
         if (!userName) throw new Error('用户登录：userName不能为空');
         if (!passWord) throw new Error('用户登录：passWord不能为空');
 
-        const result = await ctx.service.user.register(userName, passWord);
+        const result = await ctx.service.accounts.register(userName, passWord);
 
         ctx.body = this.app.result({
             data: result
@@ -47,7 +47,7 @@ class UserController extends Controller {
             }) || '';
         if (!usertoken) throw new Error('退出登录：token不能为空');
 
-        await ctx.service.user.logout(usertoken);
+        await ctx.service.accounts.logout(usertoken);
         this.ctx.body = this.app.result({
             data: {}
         });
@@ -61,7 +61,7 @@ class UserController extends Controller {
         const pageSize = query.pageSize || this.app.config.pageSize;
         const userName = query.userName;
 
-        const result = await ctx.service.user.getUserList(pageNo, pageSize, userName);
+        const result = await ctx.service.accounts.getUserList(pageNo, pageSize, userName);
 
         ctx.body = this.app.result({
             data: result
@@ -78,7 +78,7 @@ class UserController extends Controller {
 
         if (!id) throw new Error('冻结解冻用户：id不能为空');
 
-        const result = await ctx.service.user.setIsUse(id, isUse, usertoken);
+        const result = await ctx.service.accounts.setIsUse(id, isUse, usertoken);
 
         ctx.body = this.app.result({
             data: result
@@ -94,7 +94,7 @@ class UserController extends Controller {
 
         if (!id) throw new Error('删除用户：id不能为空');
 
-        const result = await ctx.service.user.delete(id, usertoken);
+        const result = await ctx.service.accounts.delete(id, usertoken);
 
         ctx.body = this.app.result({
             data: result
@@ -145,7 +145,7 @@ class UserController extends Controller {
             if (!userResult.data.login || !userResult.data.node_id) {
                 result.desc = 'github 权限验证失败, 请重试！';
             } else {
-                result = await ctx.service.user.githubRegister(userResult.data.login, userResult.data.node_id);
+                result = await ctx.service.accounts.githubRegister(userResult.data.login, userResult.data.node_id);
             }
             result.type = 'github';
             await ctx.render('github', {
@@ -174,7 +174,7 @@ class UserController extends Controller {
         try {
             const query_code = ctx.query.code;
 
-            const getTokenPath = `https://api.weibo.com/oauth2/access_token?client_id=${this.app.config.weibo.client_id}&client_secret=${this.app.config.weibo.client_secret}&grant_type=authorization_code&code=${query_code}&redirect_uri=${this.app.config.origin}/api/v1/weibo/callback`;
+            const getTokenPath = `https://api.weibo.com/oauth2/access_token?client_id=${this.app.config.weibo.client_id}&client_secret=${this.app.config.weibo.client_secret}&grant_type=authorization_code&code=${query_code}&redirect_uri=${this.app.config.origin}/api/v1/accounts/weibo/callback`;
             const tokenResult = await ctx.curl(getTokenPath, {
                 method: 'POST',
                 contentType: 'json',
@@ -216,7 +216,7 @@ class UserController extends Controller {
             if (!getUserInfo.data.name || !getUserInfo.data.idstr) {
                 result.desc = '新浪微博权限验证失败, 请重试！';
             } else {
-                result = await ctx.service.user.githubRegister(getUserInfo.data.name, getUserInfo.data.idstr);
+                result = await ctx.service.accounts.githubRegister(getUserInfo.data.name, getUserInfo.data.idstr);
             }
             result.type = 'weibo';
             await ctx.render('github', {
@@ -284,7 +284,7 @@ class UserController extends Controller {
             if (!getUserMsg.data.nickname || !getUserMsg.data.openid) {
                 result.desc = '微信登录权限验证失败, 请重试！';
             } else {
-                result = await ctx.service.user.githubRegister(getUserMsg.data.nickname, getUserMsg.data.openid);
+                result = await ctx.service.accounts.githubRegister(getUserMsg.data.nickname, getUserMsg.data.openid);
             }
             result.type = 'wechat';
             await ctx.render('github', {

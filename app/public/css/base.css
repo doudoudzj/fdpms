@@ -1,17 +1,4 @@
 /*CSS Reset*/
-*,
-*:before,
-*:after {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-html {
-    font-family: sans-serif;
-    line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
 
 /*设置字体*/
 @font-face {
@@ -21,61 +8,9 @@ html {
     src: local('Montserrat Regular'), local('Montserrat-Regular'), url('../font/JTUSjIg1_i6t8kCHKm459WlhzQ.woff') format('woff');
 }
 
-/*字体结束*/
-body,
-div,
-dl,
-dt,
-dd,
-ul,
-ol,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-pre,
-code,
-form,
-fieldset,
-legend,
-input,
-textarea,
-p,
-blockquote,
-th,
-td,
-header,
-hgroup,
-nav,
-section,
-article,
-aside,
-footer,
-figure,
-figcaption,
-menu,
-button {
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    margin: 0;
     font-family: "Montserrat", Helvetica, STHeiTi, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: left;
-    position: relative;
-    line-height: 1.5;
     background-color: #f9fafb;
-    -webkit-text-size-adjust: none;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    outline: 0;
 }
 
 h1,
@@ -88,10 +23,10 @@ h6 {
     font-weight: normal;
 }
 
-table {
+/* table {
     border-collapse: collapse;
     border-spacing: 0;
-}
+} */
 
 fieldset,
 img {
@@ -113,31 +48,9 @@ select {
     -ms-appearence: none;
 }
 
-button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-    border: none;
-    background: none;
-    -webkit-appearance: none;
-    outline: none;
-}
-
-a {
-    -webkit-touch-callout: none;
-    text-decoration: none;
-    outline: 0;
-    color: #8776f7;
-    text-decoration: none;
-}
-
 em,
 i {
     font-style: normal;
-}
-
-iframe {
-    display: none;
 }
 
 [v-cloak] {
@@ -317,35 +230,6 @@ iframe {
 }
 
 /****table*****/
-table {
-    width: 100%;
-}
-
-table.table tr {
-    border: solid 1px #eee;
-}
-
-table.table tr th {
-    font-size: 13px;
-    height: 40px;
-    font-weight: 300;
-    padding: 8px;
-}
-
-table.table tr:nth-child(odd) {
-    background: #f7f9ff;
-}
-
-table.table tr td {
-    font-size: 13px;
-    border: solid 1px #eee;
-    padding: 8px;
-}
-
-/* table.table tr:nth-child(odd) {
-    background: #f7f9fa;
-} */
-
 .inp {
     height: 35px;
     border: solid 1px #eee;
@@ -358,36 +242,6 @@ table.table tr td {
 .inp::placeholder {
     color: #bbb;
     font-size: 13px;
-}
-
-.btn {
-    font-size: 14px;
-    padding: 8px 15px;
-    border: solid 1px #ddd;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.btn-default {
-    color: #8776f7;
-    background: #fff;
-    border: solid 1px #8776f7;
-}
-
-.btn-default:hover {
-    color: #A79AFE;
-    border: solid 1px #A79AFE;
-}
-
-.btn-main {
-    color: #fff;
-    background: #8776f7;
-    border: solid 1px #8776f7;
-}
-
-.btn-main:hover {
-    background: #A79AFE;
-    border: solid 1px #A79AFE;
 }
 
 .main-body {
@@ -421,10 +275,6 @@ table.table tr td {
     border-radius: 4px;
     box-shadow: 0 1px 2px rgba(150, 150, 150, 0.3);
     padding: 20px 30px 30px;
-}
-
-.com_block table.table .btn {
-    padding: 5px 8px;
 }
 
 .com_content_body {
@@ -519,7 +369,7 @@ table.table tr td {
 }
 
 .component_search .select {
-    float: left;
+    margin-left: 10px;
     position: relative;
     cursor: pointer;
 }
@@ -546,7 +396,6 @@ table.table tr td {
 
 .component_search .select .select-time {
     width: 700px;
-    display: none;
     position: absolute;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
     border: 1px solid #dedede;
@@ -580,13 +429,13 @@ table.table tr td {
     color: #fff;
 }
 
-.component_search .select .select-time .btn {
+/* .component_search .select .select-time .btn {
     float: none;
     padding: .8rem;
     margin: 0;
     border-radius: 3px;
     cursor: pointer;
-}
+} */
 
 .component_search .select .select-time .select_time_active {
     background: #458ef9;
@@ -666,11 +515,6 @@ table.table tr td {
     border-radius: 30px;
     margin-right: 20px;
     background: #ddd;
-}
-
-.com_but_block .btn-main {
-    background: #8776f7;
-    color: #fff;
 }
 
 /* model */

@@ -154,8 +154,8 @@
                     <a href="JavaScript:" @click="type=1" v-show="type===2">去登陆</a>
                 </div>
                 <div class="submit">
-                    <button class="button" v-show="type===1" @click="login">立即登录</button>
-                    <button class="button" v-show="type===2" @click="register">立即注册</button>
+                    <button class="btn btn-primary btn-block" v-show="type===1" @click="login">立即登录</button>
+                    <button class="btn btn-primary btn-block" v-show="type===2" @click="register">立即注册</button>
                 </div>
                 <div class="third_party_auth" v-if="gh_client_id || wb_client_id || wx_client_id">
                     <img v-if="gh_client_id" @click="github" src="/public/img/github.png" alt="github login"
@@ -208,7 +208,7 @@
                     return false;
                 }
                 util.ajax({
-                    url: config.baseApi + 'api/v1/user/login',
+                    url: config.baseApi + 'api/v1/accounts/login',
                     data: {
                         userName: this.username,
                         passWord: this.password
@@ -217,7 +217,7 @@
                         popup.miss({
                             title: '登录成功！'
                         });
-                        util.setStorage('local', 'userMsg', JSON.stringify(data.data))
+                        util.setStorage('local', 'userMsg', JSON.stringify(data.data));
                         setTimeout(() => {
                             window.location.href = '/';
                         }, 500);
@@ -248,7 +248,7 @@
                 }
 
                 util.ajax({
-                    url: config.baseApi + 'api/v1/user/register',
+                    url: config.baseApi + 'api/v1/accounts/register',
                     data: {
                         userName: this.username,
                         passWord: this.password
@@ -277,7 +277,7 @@
                 path += '&scope=' + '<%= data.wb_scope %>';
                 path += '&state=' + Date.now();
                 path += '&redirect_uri=' + encodeURIComponent(window.location.origin +
-                '/api/v1/weibo/callback');
+                '/api/v1/accounts/weibo/callback');
                 window.open(path, '', 'width=800,height=500,location=no,menubar=no');
             },
             wechat() {
@@ -287,7 +287,7 @@
                 path += '&scope=snsapi_login';
                 path += '&state=' + Date.now();
                 path += '&redirect_uri=' + encodeURIComponent(window.location.origin +
-                    '/api/v1/wechat/callback');
+                    '/api/v1/accounts/wechat/callback');
                 path += '#wechat_redirect';
                 window.open(path, '', 'width=800, height=500, location=no, menubar=no');
             }

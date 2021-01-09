@@ -143,12 +143,12 @@
             <a href="/errors">
                 <div class="item">重启信息</div>
             </a>
-            <a href="/users">
-                <div class="item">用户</div>
+            <a href="/accounts">
+                <div class="item">账号</div>
             </a>
         </template>
         <a href="/emails">
-            <div class="item">邮件</div>
+            <div class="item">联系人</div>
         </a>
         <div class="item mobile" @click="logout"><span class="iconfont">&#xe614;</span></div>
         <div class="item" @click="logout">退出</div>
@@ -165,26 +165,25 @@
                 $(".com_side").css("display", "block");
             }
         });
-    })
+    });
     new Vue({
         el: '#com_header',
-        data: function () {
+        data() {
             return {
                 userMsg: {
                     user_name: '游小白',
                     level: 1,
                     token: ''
-                },
-            }
+                }
+            };
         },
         mounted() {
-            console.log(this.app)
             const userMsg = util.getStorage('local', 'userMsg');
             this.userMsg = userMsg ? JSON.parse(userMsg) : {};
         },
         methods: {
             addsystem() {
-                location.href = '/apps/select'
+                window.location.href = '/apps/add';
             },
             logout() {
                 const _this = this;
@@ -193,15 +192,17 @@
                     yes() {
                         util.ajax({
                             type: 'get',
-                            url: `${config.baseApi}api/v1/user/logout?token=${_this.userMsg.token}`,
-                            success: data => {
-                                util.setStorage('local', 'userMsg', '');
-                                location.href = `/login`
+                            url: `${config.baseApi}api/v1/accounts/logout?token=${_this.userMsg.token}`,
+                            success: () => {
+                                window.localStorage.removeItem('userMsg');
+                                // util.setStorage('local', 'userMsg', '');
+                                window.location.href = '/login';
                             }
-                        })
-                    }
-                })
+                        });
+                    },
+                    no() {}
+                });
             }
         }
-    })
+    });
 </script>

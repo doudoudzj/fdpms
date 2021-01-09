@@ -72,7 +72,7 @@ class PvuvipTaskService extends Service {
             pvuvip.type = type;
             await pvuvip.save();
 
-            // 每日邮件触达
+            // 每日邮件通知
             if (type === 2) {
                 this.ctx.service.wx.sendEmail.getDaliyDatas(
                     {
@@ -88,7 +88,7 @@ class PvuvipTaskService extends Service {
                     'pvuvip'
                 );
             }
-            // 流量峰值 超过历史top邮件触达
+            // 流量峰值 超过历史top邮件通知
             if (type === 1) {
                 this.ctx.service.emails.highestPvTipsEmail({ appId, pv, uv, ip, ajax, flow });
             }

@@ -24,7 +24,7 @@ class HomeController extends BaseController {
         });
     }
 
-    // 用户登录
+    // 账号登录
     async login() {
         const { ctx } = this;
         await ctx.render('login', {
@@ -45,17 +45,17 @@ class HomeController extends BaseController {
         const { ctx } = this;
         await ctx.render('apps', {
             data: {
-                title: '应用系统列表'
+                title: '应用管理'
             }
         });
     }
 
-    // 用户管理
-    async users() {
+    // 账号管理
+    async accounts() {
         const { ctx } = this;
-        await ctx.render('users', {
+        await ctx.render('accounts', {
             data: {
-                title: '用户列表'
+                title: '账号管理'
             }
         });
     }
@@ -70,12 +70,12 @@ class HomeController extends BaseController {
         });
     }
 
-    // 邮件管理
+    // 联系人管理
     async emails() {
         const { ctx } = this;
         await ctx.render('emails', {
             data: {
-                title: '邮件管理'
+                title: '联系人管理'
             }
         });
     }

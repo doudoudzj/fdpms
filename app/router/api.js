@@ -3,33 +3,30 @@
 module.exports = (app) => {
     const apiV1Router = app.router.namespace('/api/v1/');
     const { controller, middleware } = app;
-    const { user, remove, system, errors, emails } = controller.api;
+    const { accounts, remove, system, errors, emails } = controller.api;
 
     // 校验用户是否登录中间件
     const tokenRequired = middleware.tokenRequired();
 
-    // -----------------用户相关------------------
-    // 用户登录
-    apiV1Router.post('user/login', user.login);
-    // 用户注册
-    apiV1Router.post('user/register', user.register);
+    // -----------------账号相关------------------
+    // 账号登录
+    apiV1Router.post('accounts/login', accounts.login);
+    // 账号注册
+    apiV1Router.post('accounts/register', accounts.register);
     // 退出登录
-    apiV1Router.get('user/logout', tokenRequired, user.logout);
-    // 获得用户列表
-    apiV1Router.post('user/getUserList', tokenRequired, user.getUserList);
-    // 冻结解冻用户
-    apiV1Router.post('user/setIsUse', tokenRequired, user.setIsUse);
-    // 删除用户
-    apiV1Router.post('user/delete', tokenRequired, user.delete);
-
-    // -----------------github 登录------------------
-    apiV1Router.get('github/callback', user.githubLogin);
-
-    // -----------------新浪微博 登录------------------
-    apiV1Router.get('weibo/callback', user.weiboLogin);
-
-    // -----------------微信微博 登录------------------
-    apiV1Router.get('wechat/callback', user.wechatLogin);
+    apiV1Router.get('accounts/logout', tokenRequired, accounts.logout);
+    // 账号列表
+    apiV1Router.post('accounts/list', tokenRequired, accounts.getUserList);
+    // 冻结/解冻账号
+    apiV1Router.post('accounts/setIsUse', tokenRequired, accounts.setIsUse);
+    // 删除账号
+    apiV1Router.post('accounts/delete', tokenRequired, accounts.delete);
+    // 第三方登录：GitHub
+    apiV1Router.get('accounts/github/callback', accounts.githubLogin);
+    // 第三方登录：新浪微博
+    apiV1Router.get('accounts/weibo/callback', accounts.weiboLogin);
+    // 第三方登录：微信微博
+    apiV1Router.get('accounts/wechat/callback', accounts.wechatLogin);
 
     // ----------------系统配置相关---------------
     // 新增系统

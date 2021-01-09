@@ -4,20 +4,21 @@ module.exports = (app) => {
     const { router, controller } = app;
     const { home } = controller.web;
 
-    // 应用列表，我的应用
+    // -----------------后台页面路由------------------
+    // 后台首页，我的应用
     router.get('/', home.systemlist);
 
     // 用户登录
     router.get('/login', home.login);
 
-    // 应用端列表
+    // 应用列表
     router.get('/apps', home.apps);
 
     // 新增应用，选择系统类型
-    router.get('/apps/select', home.selectype);
+    router.get('/apps/add', home.selectype);
 
-    // 用户管理
-    router.get('/users', home.users);
+    // 账号管理
+    router.get('/accounts', home.accounts);
 
     // 系统重启错误信息
     router.get('/errors', home.errors);
