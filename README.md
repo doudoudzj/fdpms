@@ -1,6 +1,6 @@
-# fd-pms
+# fdpms
 
-> fd-pms(frontend-performance-monitoring-system)
+> fdpms(frontend-performance-monitoring-system)
 >
 > 一款完整、高性能、高可用的前端性能监控和统计平台
 
@@ -49,8 +49,8 @@
 
 ## 项目开发文档
 
--   [fd-pms 是什么?](https://blog.seosiwei.com/performance/index.html)
--   [fd-pms 在高流量高并发项目下的架构配置建议实践说明](https://blog.seosiwei.com/detail/53)
+-   [fdpms 是什么?](https://blog.seosiwei.com/performance/index.html)
+-   [fdpms 在高流量高并发项目下的架构配置建议实践说明](https://blog.seosiwei.com/detail/53)
 -   [系统高可用之 Mongodb 集群分片架构](https://blog.seosiwei.com/performance/colony.html)
 -   [系统高可用之 Mongodb 副本集读写分离架构](https://blog.seosiwei.com/performance/replica_set.html)
 -   [Servers 集群模式下避免定时任务的多次执行](https://blog.seosiwei.com/performance/repeart_task.html)
@@ -58,7 +58,7 @@
 -   [项目定时任务功能说明](https://blog.seosiwei.com/performance/tasks.html)
 -   [github 登录授权说明](https://blog.seosiwei.com/performance/github.html)
 -   [简单通用的 Node 前后端 Token 登录机制和 github 授权登录方式](https://blog.seosiwei.com/detail/49)
--   [fd-pms 中集成 kafka 的开发实践和限流优雅降级](https://blog.seosiwei.com/detail/51)
+-   [fdpms 中集成 kafka 的开发实践和限流优雅降级](https://blog.seosiwei.com/detail/51)
 
 ## 项目说明
 

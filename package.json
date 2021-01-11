@@ -1,7 +1,7 @@
 {
-  "name": "fd-pms",
+  "name": "fdpms",
   "version": "1.0.0",
-  "description": "前端性能监控系统",
+  "description": "frontend-performance-monitoring-system",
   "private": true,
   "dependencies": {
     "address": "^1.0.3",
