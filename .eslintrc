@@ -27,7 +27,8 @@
         "window": true,
         "Vue": true,
         "popup": "readonly",
-        "util": "readonly"
+        "util": "readonly",
+        "$": "readonly"
     },
     "plugins": ["html"],
     "settings": {

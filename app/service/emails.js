@@ -13,11 +13,12 @@ class EmailsService extends Service {
      * @returns
      * @memberof EmailsService
      */
-    async getList(pageNos, pageSize, email) {
+    async getList(pageNos, pageSize, phone, email) {
         pageNos = pageNos * 1;
         pageSize = pageSize * 1;
 
         const query = {};
+        if (phone) query.phone = phone;
         if (email) query.email = email;
 
         const count = Promise.resolve(this.ctx.model.Email.count(query).exec());
@@ -76,10 +77,11 @@ class EmailsService extends Service {
      * @returns
      * @memberof EmailsService
      */
-    async addEmail(email, name) {
+    async addEmail(name, phone, email) {
         const emails = this.ctx.model.Email();
-        emails.email = email;
         emails.name = name;
+        emails.phone = phone;
+        emails.email = email;
 
         return await emails.save();
     }
@@ -92,16 +94,12 @@ class EmailsService extends Service {
      * @returns
      * @memberof EmailsService
      */
-    async updateEmail(id, email, name) {
-        // const old = await this.getItem(id);
-        // console.log('旧', old);
-        // if (!old || !old.email) {
-        //     return {};
-        // }
+    async updateEmail(id, name, phone, email) {
         const data = {
             $set: {
-                email,
-                name
+                name,
+                phone,
+                email
             }
         };
         // 更新信息
@@ -116,8 +114,11 @@ class EmailsService extends Service {
         }
 
         return {
-            email,
-            name,
+            now: {
+                name,
+                phone,
+                email
+            },
             old: result
         };
     }

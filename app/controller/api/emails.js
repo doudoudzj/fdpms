@@ -8,9 +8,10 @@ class EmailsController extends Controller {
         const query = ctx.request.query;
         const pageNo = query.pageNo;
         const pageSize = query.pageSize || this.app.config.pageSize;
+        const phone = query.phone;
         const email = query.email;
 
-        const result = await ctx.service.emails.getList(pageNo, pageSize, email);
+        const result = await ctx.service.emails.getList(pageNo, pageSize, phone, email);
 
         ctx.body = this.app.result({
             data: result
@@ -20,12 +21,13 @@ class EmailsController extends Controller {
     async addEmail() {
         const { ctx } = this;
         const query = ctx.request.body;
-        const email = query.email;
         const name = query.name;
-        if (!email) throw new Error('新增邮件：邮件地址不能为空!');
-        if (!name) throw new Error('新增邮件：邮件所属人不能为空!');
+        const phone = query.phone;
+        const email = query.email;
+        if (!name) throw new Error('新增联系人：姓名不能为空!');
+        if (!email) throw new Error('新增联系人：邮箱地址不能为空!');
 
-        const result = await ctx.service.emails.addEmail(email, name);
+        const result = await ctx.service.emails.addEmail(name, phone, email);
 
         ctx.body = this.app.result({
             data: result
@@ -34,13 +36,13 @@ class EmailsController extends Controller {
 
     async updateEmail() {
         const { ctx } = this;
-        const { id, email, name } = ctx.request.body;
+        const { id, name, phone, email } = ctx.request.body;
 
-        if (!id) throw new Error('编辑邮件：邮件索引不能为空!');
-        if (!email) throw new Error('编辑邮件：邮件地址不能为空!');
-        if (!name) throw new Error('编辑邮件：邮件所属人不能为空!');
+        if (!id) throw new Error('编辑联系人：id不能为空!');
+        if (!name) throw new Error('编辑联系人：姓名不能为空!');
+        if (!email) throw new Error('编辑联系人：邮箱地址不能为空!');
 
-        const result = await ctx.service.emails.updateEmail(id, email, name);
+        const result = await ctx.service.emails.updateEmail(id, name, phone, email);
 
         ctx.body = this.app.result({
             data: result
@@ -72,7 +74,7 @@ class EmailsController extends Controller {
         const systemIds = query.systemIds || [];
         const email = query.email;
 
-        if (!id) throw new Error('删除邮件：id不能为空!');
+        if (!id) throw new Error('删除联系人：id不能为空!');
 
         const result = await ctx.service.emails.deleteEmail(id, systemIds, email);
 
