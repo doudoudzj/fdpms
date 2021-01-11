@@ -23,24 +23,6 @@
         margin: 15px 0 20px 50px;
     }
 
-    .setting-body .block .content .script-text {
-        max-width: 1200px;
-        background: #f4f4f4;
-        color: #333;
-        font-size: 14px;
-        border: none;
-        padding: 10px;
-    }
-
-    .setting-body .block .code code {
-        padding: 4px 8px;
-        background: #000;
-        color: #fff;
-        font-size: 12px;
-        border-radius: 5px;
-        margin: 0 3px;
-    }
-
     .setting-body .block-center {
         width: 500px;
         margin-left: 150px;
@@ -207,33 +189,27 @@
             <h1 class="h1">2、使用SDK部署方式</h1>
             <div class="content">
                 <div class="item">2.1、下载需要的SDK</div>
-                <a href="/public/file/web-report-default.min.js.zip"><button class="btn btn-primary">通用SDK</button></a>
-                <a href="/public/file/web-report-fetch.min.js.zip"><button
-                        class="btn btn-primary ml10">Fetch专用SDK</button></a>
-                <a href="/public/file/web-report-jquery.min.js.zip"><button
-                        class="btn btn-primary ml10">Jquery专用SDK</button></a>
-                <a href="/public/file/web-report-axios.min.js.zip"><button
-                        class="btn btn-primary ml10">Axios专用SDK</button></a>
-                <a href="/public/file/web-report-none.min.js.zip"><button
-                        class="btn btn-primary ml10">业务代码触发SDK</button></a>
+                <a class="btn btn-primary" href="/public/file/web-report-default.min.js.zip">通用SDK</a>
+                <a class="btn btn-primary" href="/public/file/web-report-fetch.min.js.zip">Fetch专用SDK</a>
+                <a class="btn btn-primary" href="/public/file/web-report-jquery.min.js.zip">Jquery专用SDK</a>
+                <a class="btn btn-primary" href="/public/file/web-report-axios.min.js.zip">Axios专用SDK</a>
+                <a class="btn btn-primary" href="/public/file/web-report-none.min.js.zip">业务代码触发SDK</a>
                 <div class="item mt20">2.2、详细使用文档请参考以下SDK链接</div>
                 <p>在html的头部引以下下代码</p>
-                <div class="script-text mb20">
                     <pre><\script src="/dist/performance-report-default.min.js"><\/script>
 <\script>
 Performance({
-  	domain: '{{location.origin}}/api/v1/report/web', 
-  	add:{
-  		appId:'{{systemInfo.app_id}}'
-  	}
+    domain: '{{location.origin}}/api/v1/report/web',
+    add: {
+        appId: '{{systemInfo.app_id}}'
+    }
 })
 <\/script>
 </pre>
-                </div>
                 <a href="https://github.com/wangweianger/performance-report" target="_target">浏览器端性能上报SDK使用文档</a>
             </div>
             <h1 class="h1">3、部署脚本说明</h1>
-            <div class="content code">
+            <div class="content">
                 <p>复制生成的代码，将其粘贴在<code>&lt;head&gt;</code>中。</p>
                 <p class="notice">注意：需要将代码粘贴在<code>&lt;meta&gt;</code>后面，所有<code>&lt;script&gt;</code>前面。</p>
             </div>

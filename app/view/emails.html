@@ -1,7 +1,7 @@
 <style scoped>
     .com_model .content {
         width: 450px;
-        height: 280px;
+        height: 330px;
         border-radius: 5px;
     }
 
@@ -21,7 +21,7 @@
 
     .com_model .content .main .item span {
         display: inline-block;
-        width: 80px;
+        width: 90px;
         line-height: 35px;
         padding-left: 30px;
     }
@@ -31,12 +31,6 @@
         width: 300px;
         height: 35px;
         padding-left: 10px;
-    }
-
-    .com_model .content .main .btn {
-        display: block;
-        margin: 40px auto 0;
-        padding: 10px 100px;
     }
 
     .com_model .content .iconfont {
@@ -81,7 +75,7 @@
             </tr>
             <tr v-for="item in datalist">
                 <td>{{item.name}}</td>
-                <td>未支持</td>
+                <td>{{item.phone}}</td>
                 <td>{{item.email}}</td>
                 <td>
                     <template v-if="item.system_ids&&item.system_ids.length">
@@ -113,11 +107,15 @@
     <div class="com_model" v-show="showModel">
         <div class="mask" @click="showModel=false"></div>
         <div class="content">
-            <h1 class="com_h2 mt20 ml20">{{ this.id ? '编辑联系人' : '新增邮件' }} <span class="iconfont fr" @click="showModel=false">&#xe674;</span></h1>
+            <h1 class="com_h2 mt20 ml20">{{ this.id ? '编辑联系人' : '新增联系人' }} <span class="iconfont fr" @click="showModel=false">&#xe674;</span></h1>
             <div class="main">
-                <div class="item"><span>邮件：</span><input type="text" v-model.trim="email" placeholder="邮件地址"></div>
-                <div class="item"><span>姓名：</span><input type="text" v-model.trim="name" placeholder="所属人"></div>
-                <button class="btn btn-default block" @click="submit">确定</button>
+                <div class="item"><span>姓名：</span><input type="text" v-model.trim="name" placeholder="联系人姓名"></div>
+                <div class="item"><span>手机号：</span><input type="text" v-model.trim="phone" placeholder="联系人手机号码"></div>
+                <div class="item"><span>邮箱：</span><input type="text" v-model.trim="email" placeholder="联系人邮件地址"></div>
+                <div class="item">
+                    <span></span>
+                    <button class="btn btn-primary" @click="submit">确定</button>
+                </div>
             </div>
         </div>
     </div>
@@ -136,6 +134,7 @@
                 datalist: [],
                 userMsg: {},
                 isLoadend: false,
+                phone: '',
                 email: '',
                 name: '',
                 id: ''
@@ -148,10 +147,10 @@
             const userMsg = util.getStorage('local', 'userMsg');
             this.userMsg = userMsg ? JSON.parse(userMsg) : {};
 
-            this.getEmailsList();
+            this.getList();
         },
         methods: {
-            getEmailsList() {
+            getList() {
                 util.ajax({
                     type: 'get',
                     url: config.baseApi + 'api/v1/emails/list',
@@ -173,7 +172,7 @@
                             totalCount: data.data.totalNum,
                             callback: (nowPage, totalPage) => {
                                 this.pageNo = nowPage;
-                                this.getEmailsList();
+                                this.getList();
                             }
                         });
                     }
@@ -182,32 +181,53 @@
             editEmail(item) {
                 // 添加/编辑
                 this.showModel = true;
-                if (item && item._id && item.name && item.email) {
+                if (item && item._id) {
                     this.id = item._id;
-                    this.email = item.email;
                     this.name = item.name;
+                    this.phone = item.phone;
+                    this.email = item.email;
                     return;
                 }
                 this.id = '';
-                this.email = '';
                 this.name = '';
+                this.phone = '';
+                this.email = '';
             },
             submit() {
+                if (!util.regCombination('*').test(this.name)) {
+                    popup.miss({
+                        title: '请填写联系人姓名!'
+                    });
+                    return false;
+                }
+                // if (!util.regCombination('*').test(this.phone)) {
+                //     popup.miss({
+                //         title: '请填写联系人手机号!'
+                //     });
+                //     return false;
+                // }
+                if (this.phone && !util.regCombination('m').test(this.phone)) {
+                    popup.miss({
+                        title: '手机号码格式有误!'
+                    });
+                    return false;
+                }
+                if (!util.regCombination('*').test(this.email)) {
+                    popup.miss({
+                        title: '请填写联系人邮件地址!'
+                    });
+                    return false;
+                }
                 if (!util.regCombination('e').test(this.email)) {
                     popup.miss({
                         title: '邮件地址格式有误!'
                     });
                     return false;
                 }
-                if (!util.regCombination('*').test(this.name)) {
-                    popup.miss({
-                        title: '请填写邮件所属人!'
-                    });
-                    return false;
-                }
                 const params = {
-                    email: this.email,
-                    name: this.name
+                    name: this.name,
+                    phone: this.phone,
+                    email: this.email
                 };
                 let operate = 'api/v1/emails/add';
                 if (this.id) {
@@ -219,7 +239,7 @@
                     data: params,
                     success: () => {
                         this.showModel = false;
-                        this.getEmailsList();
+                        this.getList();
                         this.email = '';
                         this.name = '';
                         popup.miss({
@@ -264,7 +284,7 @@
                                 email: item.email
                             },
                             success: () => {
-                                _this.getEmailsList();
+                                _this.getList();
                                 popup.miss({
                                     title: '操作成功!'
                                 });
