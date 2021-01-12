@@ -1,5 +1,6 @@
 'use strict';
 
+// 后台系统使用
 module.exports = (app) => {
     const mongoose = app.mongoose;
     const Schema = mongoose.Schema;

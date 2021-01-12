@@ -40,3 +40,8 @@ exports.alinode = {
     enable: false,
     package: 'egg-alinode'
 };
+
+exports.elasticsearch = {
+    enable: false,
+    package: 'egg-es'
+};

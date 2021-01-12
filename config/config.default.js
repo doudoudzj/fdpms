@@ -52,7 +52,7 @@ module.exports = () => {
     config.ip_thread = 5;
 
     // 上报原始数据使用redis存储、kafka储存、还是使用mongodb存储
-    config.report_data_type = 'redis'; // redis kafka mongodb
+    config.report_data_type = 'redis'; // redis/kafka/mongodb
 
     // 使用redis储存原始数据时，相关配置 （report_data_type=redis生效）
     config.redis_consumption = {
@@ -70,46 +70,60 @@ module.exports = () => {
     // kafka 配置 (report_data_type = kafka生效)
     // 配置参考 https://www.npmjs.com/package/kafka-node
     config.kafka = {
+        is_consumer: false, // 启用消费者模式
+        db_type: 'es', // 日志存储模式 mongodb/elasticsearch
         client: {
             // kafkaClient
             kafkaHost: 'localhost:9092'
         },
         producer: {
             web: {
-                topic: 'fdpms_perfor_web',
+                category: 'web',
+                topic: 'logstash',
+                indexname: 'fdpms_logs',
                 partition: 0, // default 0
                 attributes: 0 // default: 0
-                // timestamp: Date.now(),
             },
             wx: {
-                topic: 'fdpms_perfor_wx',
+                category: 'web',
+                topic: 'logstash',
+                indexname: 'fdpms_logs',
                 partition: 0, // default 0
                 attributes: 0 // default: 0
             }
         },
+        // 启用消费者模式
         // consumer 和 consumerGroup消费任选其一即可
         // 优先选择consumer消费，两种消费配置任留一种即可
         consumer: {
             web: {
-                topic: 'fdpms_perfor_web',
+                category: 'application',
+                indexname: 'fdpms_logs',
+                topic: 'logstash',
                 offset: 0, // default 0
                 partition: 0 // default 0
             },
             wx: {
-                topic: 'fdpms_perfor_wx',
+                category: 'application',
+                indexname: 'fdpms_logs',
+                topic: 'logstash',
                 offset: 0, // default 0
                 partition: 0 // default 0
             }
         },
         consumerGroup: {
             web: {
+                category: 'application',
+                indexname: 'fdpms_logs',
                 // ConsumerGroup(options, topics)
-                topic: 'fdpms_perfor_web',
+                topic: 'logstash',
                 groupId: 'WebPerformanceGroup',
                 commitOffsetsOnFirstJoin: true
             },
             wx: {
-                topic: 'fdpms_perfor_wx',
+                category: 'application',
+                indexname: 'fdpms_logs',
+                topic: 'logstash',
                 groupId: 'WxPerformanceGroup',
                 commitOffsetsOnFirstJoin: true
             }
@@ -126,7 +140,7 @@ module.exports = () => {
     config.report_thread = 10;
 
     // 解析用户ip地址为城市是使用redis还是使用mongodb
-    config.ip_redis_or_mongodb = 'redis'; // redis  mongodb
+    config.ip_redis_or_mongodb = 'redis'; // redis/mongodb
 
     // 文件缓存ip对应地理位置（文件名）
     config.ip_city_cache_file = {
@@ -229,7 +243,13 @@ module.exports = () => {
         }
     };
 
-    // 必需服务 mongodb 服务
+    // elasticsearch 配置
+    config.elasticsearch = {
+        host: 'localhost:9200',
+        apiVersion: '7.x'
+    };
+
+    // 必需服务 mongodb 服务，基础服务，系统后台使用
     const dbclients = {
         db3: {
             // 单机部署

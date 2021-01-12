@@ -10,6 +10,7 @@ module.exports = (app) => {
     const WebReportSchema = new Schema({
         app_id: { type: String }, // 系统标识
         create_time: { type: Date, default: Date.now }, // 创建时间
+        headers: { type: Mixed }, // 用户浏览器信息
         user_agent: { type: String }, // 用户浏览器信息标识
         ip: { type: String }, // 用户ip
         mark_page: { type: String }, // 所有资源页面统一标识 html img css js 用户系统信息等

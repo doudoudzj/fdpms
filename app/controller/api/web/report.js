@@ -21,13 +21,18 @@ class ReportController extends Controller {
         query.ip = ctx.get('X-Real-IP') || ctx.get('X-Forwarded-For') || ctx.ip;
         query.url = query.url || ctx.headers.referer;
         query.user_agent = ctx.headers['user-agent'];
+        query.headers = ctx.headers;
 
-        if (this.app.config.report_data_type === 'redis') this.saveWebReportDataForRedis(query);
-        if (this.app.config.report_data_type === 'kafka') this.saveWebReportDataForKafka(query);
-        if (this.app.config.report_data_type === 'mongodb') this.saveWebReportDataForMongodb(ctx);
+        if (this.app.config.report_data_type === 'redis') {
+            this.saveWebReportDataForRedis(query);
+        } else if (this.app.config.report_data_type === 'kafka') {
+            this.saveWebReportDataForKafka(query);
+        } else if (this.app.config.report_data_type === 'mongodb') {
+            this.saveWebReportDataForMongodb(ctx);
+        }
     }
 
-    // 通过redis 消息队列消费数据
+    // 通过 redis 消息队列消费数据
     async saveWebReportDataForRedis(query) {
         try {
             if (this.app.config.redis_consumption.total_limit_web) {
@@ -42,13 +47,13 @@ class ReportController extends Controller {
         }
     }
 
-    // 通过kafka 消息队列消费数据
+    // 通过 kafka 消息队列消费数据
     async saveWebReportDataForKafka(query) {
         // 生产者
         this.app.kafka.send('web', JSON.stringify(query));
     }
 
-    // 通过mongodb 数据库存储数据
+    // 通过 mongodb 数据库存储数据
     async saveWebReportDataForMongodb(ctx) {
         ctx.service.web.report.saveWebReportData(ctx);
     }
